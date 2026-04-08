@@ -1,6 +1,8 @@
 <?php
 include "config.php";
 
+$error = ""; 
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $fullname = $_POST['fullname'];
@@ -13,59 +15,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $gender = $_POST['gender'];
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        echo "<script>
-                alert('❌ Email must be a valid format');
-                window.location.href='signup.php';
-              </script>";
-        exit();
+        $error = "❌ Email must be a valid format";
     }
-
-    if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/', $password)) {
-        echo "<script>
-                alert('❌ Password must be at least 8 characters and include uppercase, lowercase, and a number');
-                window.location.href='signup.php';
-              </script>";
-        exit();
+    elseif (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/', $password)) {
+        $error = "❌ Password must be at least 8 characters and include uppercase, lowercase, a number, and a special character";
     }
-
-    if ($password !== $confirmPassword) {
-        echo "<script>
-                alert('❌ Passwords do not match');
-                window.location.href='signup.php';
-              </script>";
-        exit();
+    elseif ($password !== $confirmPassword) {
+        $error = "❌ Passwords do not match";
     }
+    else {
+        $stmt = $conn->prepare("SELECT email, username FROM users WHERE email=? OR username=? LIMIT 1");
+        $stmt->bind_param("ss", $email, $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            if ($row['email'] === $email) {
+                $error = "❌ Email already exists";
+            } else {
+                $error = "❌ Username already exists";
+            }
+            $stmt->close();
+        } else {
+            $stmt->close();
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $role = 'participant';
 
-    $check = "SELECT * FROM users WHERE email='$email' OR username='$username'";
-    $result = $conn->query($check);
+            $stmt = $conn->prepare("INSERT INTO users (fullname, username, email, password, country, phone, gender, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssssssss", $fullname, $username, $email, $hashedPassword, $country, $phone, $gender, $role);
 
-    if ($result->num_rows > 0) {
-        echo "<script>
-                alert('❌ Username or Email already exists');
-                window.location.href='signup.php';
-              </script>";
-        exit();
+            if ($stmt->execute()) {
+                echo "<script>alert('✅ Registration successful!'); window.location.href='login.php';</script>";
+                exit();
+            } else {
+                $error = "❌ Registration failed";
+            }
+            $stmt->close();
+        }
     }
-
-    $sql = "INSERT INTO users (fullname, username, email, password, country, phone, gender, role)
-            VALUES ('$fullname','$username','$email','$hashedPassword','$country','$phone','$gender','participant')";
-
-    if ($conn->query($sql) === TRUE) {
-        echo "<script>
-                alert('✅ Registration successful!');
-                window.location.href='login.php';
-              </script>";
-        exit();
-    } else {
-        echo "<script>
-                alert('❌ Registration failed: ".$conn->error."');
-                window.location.href='signup.php';
-              </script>";
-        exit();
-    }
-
     $conn->close();
 }
 ?>
@@ -76,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="images/logo.png">
-    <title>Mathchify Competition Management System</title>
+    <title>Matchify Competition Management System</title>
     <link rel="stylesheet" href="css/signup.css">
 </head>
 <body>
@@ -90,48 +78,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <li><a href="#">About</a></li>
             <li><a href="#">Contact</a></li>
         </ul>
-        <a href="#" class="btn">Login</a>
+        <a href="login.php" class="btn">Login</a>
     </nav>
 
     <div class="container">
         <div class="title">Registration As Participant</div>
 
-        <form action="" method="POST">
+        <div id="messageDisplay" style="text-align: center; margin-bottom: 15px; min-height: 25px;">
+            <?php if (!empty($error)) : ?>
+                <span style="color: red; font-weight: bold;"><?php echo $error; ?></span>
+            <?php endif; ?>
+        </div>
 
+        <form action="" method="POST" id="registrationForm">
             <div class="user-details">
-
                 <div class="input-box">
                     <span class="details">Full Name</span>
-                    <input type="text" name="fullname"
-                        pattern="[A-Za-z\s]+"
-                        placeholder="Enter your name"
-                        required>
+                    <input type="text" name="fullname" pattern="[A-Za-z\s]+" placeholder="Enter your name" required>
                 </div>
 
                 <div class="input-box">
                     <span class="details">Username</span>
-                    <input type="text" name="username"
-                        placeholder="Enter your username"
-                        required>
+                    <input type="text" name="username" placeholder="Enter your username" required>
                 </div>
 
                 <div class="input-box">
                     <span class="details">Email</span>
-                    <input type="email" name="email"
-                        placeholder="Enter your email"
-                        required
-                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                        title="Please enter a valid email address">
+                    <input type="email" name="email" placeholder="Enter your email" required>
                 </div>
 
                 <div class="input-box">
                     <span class="details">Password</span>
                     <div class="password-wrapper">
-                        <input type="password" name="password" id="password"
-                            placeholder="Enter your password"
-                            required
-                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                            title="At least 8 characters, include uppercase, lowercase and number">
+                        <input type="password" name="password" id="password" 
+                               placeholder="Enter your password" required
+                               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$"
+                               title="Must be at least 8 characters, include uppercase, lowercase, number and special character">
                         <span class="toggle-password" data-target="password"></span>
                     </div>
                 </div>
@@ -139,68 +121,90 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="input-box">
                     <span class="details">Confirm Password</span>
                     <div class="password-wrapper">
-                        <input type="password" name="confirmPassword" id="confirmPassword"
-                            placeholder="Confirm your password"
-                            required>
+                        <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm your password" required>
                         <span class="toggle-password" data-target="confirmPassword"></span>
                     </div>
                 </div>
-
-                <small id="passwordError" style="color:red;"></small>
 
                 <div class="input-box">
                     <span class="details">Country</span>
                     <select name="country" required>
                         <option value="">Select Country</option>
-                        <option value="+60">Malaysia</option>
-                        <option value="+65">Singapore</option>
-                        <option value="+62">Indonesia</option>
-                        <option value="+66">Thailand</option>
-                        <option value="+84">Vietnam</option>
-                        <option value="+63">Philippines</option>
-                        <option value="+86">China</option>
-                        <option value="+81">Japan</option>
-                        <option value="+82">South Korea</option>
-                        <option value="+91">India</option>
-                        <option value="+1">United States</option>
-                        <option value="+44">United Kingdom</option>
-                        <option value="+61">Australia</option>
-                        <option value="+49">Germany</option>
+                        <optgroup label="Asia">
+                            <option value="Malaysia">Malaysia</option>
+                            <option value="Singapore">Singapore</option>
+                            <option value="Indonesia">Indonesia</option>
+                            <option value="Thailand">Thailand</option>
+                            <option value="Vietnam">Vietnam</option>
+                            <option value="Philippines">Philippines</option>
+                            <option value="China">China</option>
+                            <option value="Japan">Japan</option>
+                            <option value="South Korea">South Korea</option>
+                            <option value="India">India</option>
+                            <option value="Brunei">Brunei</option>
+                            <option value="Cambodia">Cambodia</option>
+                            <option value="Laos">Laos</option>
+                            <option value="Myanmar">Myanmar</option>
+                            <option value="Pakistan">Pakistan</option>
+                            <option value="Bangladesh">Bangladesh</option>
+                            <option value="Sri Lanka">Sri Lanka</option>
+                        </optgroup>
+                        <optgroup label="Europe">
+                            <option value="United Kingdom">United Kingdom</option>
+                            <option value="Germany">Germany</option>
+                            <option value="France">France</option>
+                            <option value="Italy">Italy</option>
+                            <option value="Spain">Spain</option>
+                            <option value="Netherlands">Netherlands</option>
+                            <option value="Switzerland">Switzerland</option>
+                            <option value="Sweden">Sweden</option>
+                            <option value="Norway">Norway</option>
+                            <option value="Denmark">Denmark</option>
+                            <option value="Russia">Russia</option>
+                        </optgroup>
+                        <optgroup label="North America">
+                            <option value="United States">United States</option>
+                            <option value="Canada">Canada</option>
+                            <option value="Mexico">Mexico</option>
+                        </optgroup>
+                        <optgroup label="South America">
+                            <option value="Brazil">Brazil</option>
+                            <option value="Argentina">Argentina</option>
+                            <option value="Chile">Chile</option>
+                            <option value="Colombia">Colombia</option>
+                        </optgroup>
+                        <optgroup label="Oceania">
+                            <option value="Australia">Australia</option>
+                            <option value="New Zealand">New Zealand</option>
+                        </optgroup>
+                        <optgroup label="Middle East & Africa">
+                            <option value="United Arab Emirates">United Arab Emirates</option>
+                            <option value="Saudi Arabia">Saudi Arabia</option>
+                            <option value="Qatar">Qatar</option>
+                            <option value="Turkey">Turkey</option>
+                            <option value="Egypt">Egypt</option>
+                            <option value="South Africa">South Africa</option>
+                            <option value="Nigeria">Nigeria</option>
+                            <option value="Kenya">Kenya</option>
+                        </optgroup>
                     </select>
                 </div>
 
                 <div class="input-box">
                     <span class="details">Phone Number</span>
-                    <input type="text" name="phone"
-                        placeholder="Enter phone number"
-                        required
-                        pattern="[0-9]+">
+                    <input type="text" name="phone" placeholder="Enter phone number" required pattern="[0-9]+">
                 </div>
-
             </div>
 
             <div class="gender-details">
                 <span class="gender-title">Gender</span>
-
                 <input type="radio" name="gender" value="Male" id="dot-1" required>
                 <input type="radio" name="gender" value="Female" id="dot-2" required>
                 <input type="radio" name="gender" value="Other" id="dot-3" required>
-
                 <div class="category">
-                    <label for="dot-1">
-                        <span class="dot one"></span>
-                        <span>Male</span>
-                    </label>
-
-                    <label for="dot-2">
-                        <span class="dot two"></span>
-                        <span>Female</span>
-                    </label>
-
-                    <label for="dot-3">
-                        <span class="dot three"></span>
-                        <span>Prefer not to say</span>
-                    </label>
+                    <label for="dot-1"><span class="dot one"></span><span>Male</span></label>
+                    <label for="dot-2"><span class="dot two"></span><span>Female</span></label>
+                    <label for="dot-3"><span class="dot three"></span><span>Prefer not to say</span></label>
                 </div>
             </div>
 
@@ -215,54 +219,63 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="extra-links">
                 <span>Register as</span>
-                <a href="organiser_signup.php">Organiser</a>
+                <a href="signup(organiser).php">Organiser</a>
             </div>
-
         </form>
     </div>
 </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-
-    const form = document.querySelector("form");
+    const form = document.getElementById("registrationForm");
     const password = document.getElementById("password");
     const confirmPassword = document.getElementById("confirmPassword");
-    const emailInput = document.querySelector("input[name='email']");
-    const errorText = document.getElementById("passwordError");
+    const messageDisplay = document.getElementById("messageDisplay");
 
     document.querySelectorAll(".toggle-password").forEach(btn => {
         btn.addEventListener("click", function () {
             const input = document.getElementById(this.dataset.target);
-            input.type = input.type === "password" ? "text" : "password";
-            this.classList.toggle("active");
+            if (input.type === "password") {
+                input.type = "text";
+                this.classList.add("active");
+            } else {
+                input.type = "password";
+                this.classList.remove("active");
+            }
         });
     });
 
-    confirmPassword.addEventListener("input", () => {
-        confirmPassword.setCustomValidity("");
-        errorText.textContent = "";
-    });
+    function checkLogic() {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+        
+        if (!regex.test(password.value)) {
+            password.setCustomValidity("Invalid format");
+        } else {
+            password.setCustomValidity("");
+        }
 
-    password.addEventListener("input", () => {
-        confirmPassword.setCustomValidity("");
-        errorText.textContent = "";
-    });
+        if (confirmPassword.value !== "" && password.value !== confirmPassword.value) {
+            messageDisplay.innerHTML = '<span style="color: red; font-weight: bold;">❌ Passwords do not match</span>';
+            confirmPassword.setCustomValidity("Match Error");
+        } else if (confirmPassword.value !== "" && password.value === confirmPassword.value) {
+            messageDisplay.innerHTML = '<span style="color: green; font-weight: bold;">✅ Passwords match</span>';
+            confirmPassword.setCustomValidity("");
+        } else {
+            messageDisplay.innerHTML = "";
+            confirmPassword.setCustomValidity("");
+        }
+    }
 
-    emailInput.addEventListener("input", () => {
-        const isValid = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/.test(emailInput.value);
-        emailInput.setCustomValidity(isValid ? "" : "Please enter a valid email address");
-    });
+    password.addEventListener("input", checkLogic);
+    confirmPassword.addEventListener("input", checkLogic);
 
     form.addEventListener("submit", function(e) {
-        if (password.value !== confirmPassword.value) {
+        checkLogic();
+        if (!form.checkValidity()) {
+            form.reportValidity();
             e.preventDefault();
-            confirmPassword.setCustomValidity("Passwords do not match");
-            errorText.textContent = "Passwords do not match";
-            confirmPassword.reportValidity();
         }
     });
-
 });
 </script>
 
