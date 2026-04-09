@@ -7,33 +7,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $sql = "SELECT * FROM users WHERE email='$email'";
-    $result = $conn->query($sql);
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if ($result->num_rows == 1) {
 
         $user = $result->fetch_assoc();
 
-        // verify password
         if (password_verify($password, $user['password'])) {
 
-            // store session
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
             $_SESSION['role'] = $user['role'];
 
-            // redirect based on role
             if ($user['role'] == 'participant') {
                 echo "<script>
                         alert('✅ Login successful (Participant)');
-                        window.location.href='participant_dashboard.php';
+                        window.location.href='Participant/index(participant).php';
                       </script>";
                 exit();
             } 
             elseif ($user['role'] == 'organiser') {
                 echo "<script>
                         alert('✅ Login successful (Organiser)');
-                        window.location.href='organiser_dashboard.php';
+                        window.location.href='Organiser/index-organiser.php';
                       </script>";
                 exit();
             } 
@@ -61,6 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
+    $stmt->close();
     $conn->close();
 }
 ?>
@@ -92,16 +92,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="title">Login</div>
 
         <form action="" method="POST">
-
             <div class="user-details">
-
                 <div class="input-box">
                     <span class="details">Email</span>
-                    <input type="email" name="email"
-                        placeholder="Enter your email"
-                        required>
+                    <input type="email" name="email" placeholder="Enter your email" required>
                 </div>
-
                 <div class="input-box">
                     <span class="details">Password</span>
                     <div class="password-wrapper">
@@ -112,31 +107,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <a href="forgetpassword.php">Forgot Password?</a>
                     </div>
                 </div>
-
             <div class="button">
                 <input type="submit" value="Login" class="btn">
             </div>
-
             <div class="extra-links">
                 <span>Don't have an account?</span>
                 <a href="signup.php">Register</a>
             </div>
-
-            
-
         </form>
     </div>
 </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-
-    const password = document.getElementById("password");
-
     document.querySelectorAll(".toggle-password").forEach(btn => {
         btn.addEventListener("click", function () {
             const input = document.getElementById(this.dataset.target);
-
             if (input.type === "password") {
                 input.type = "text";
                 this.classList.add("active");
@@ -146,7 +132,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
-
 });
 </script>
 
