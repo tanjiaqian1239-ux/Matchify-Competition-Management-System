@@ -1,11 +1,11 @@
-    *{
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Poppins', sans-serif;
-    }
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
 
-    .hero{
+.hero{
     width: 100%;
     min-height: 100vh;
     padding:20px 0;
@@ -16,46 +16,57 @@
 
     display: flex;
     flex-direction: column;
-    }
+}
 
-    nav{
-        padding: 10px 45px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
+nav.main-nav{
+    padding: 10px 45px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
+.logo{
+    width: 140px;
+}
 
+nav ul{
+    display: flex;
+    align-items: center;
+}
 
-    .logo{
-        width: 140px;
-    }
+nav ul li{
+    list-style: none;
+    margin: 10px 15px;
+}
 
-    nav ul li{
-        display: inline-block;
-        list-style: none;
-        margin: 10px 15px;
-    }
+nav ul li a{
+    text-decoration: none;
+    color: #333;
+    font-weight: 400;
+}
 
-    nav ul li a{
-        text-decoration: none;
-        color: #333;
-        font-weight: 400;
-    }
+.nav-right{
+    display: flex;
+    align-items: center;
+}
 
-    .btn{
-        display: inline-block;
-        text-decoration: none;
-        padding: 14px 40px;
-        color: #fff;
-        background-image: linear-gradient(45deg, #df4881, #c430d7);
-        font-size: 14px;
-        border-radius: 30px;
-        border-top-right-radius: 0;
-        transition: 0.5s;
-    }
+.btn{
+    display: inline-block;
+    text-decoration: none;
+    padding: 10px 25px;
+    color: #fff;
+    background-image: linear-gradient(45deg, #df4881, #c430d7);
+    font-size: 14px;
+    border-radius: 30px;
+    border-top-right-radius: 0;
+    transition: 0.5s;
+}
 
-    .content{
+.btn:hover{
+    border-top-right-radius: 30px;
+}
+
+.content{
     flex: 1; 
     display: flex;
     flex-direction: column;
@@ -64,69 +75,72 @@
     text-align: center;      
 }
 
-    .content h1{
-        font-size: 70px;
-        color: #222;
-    }
+.content h1{
+    font-size: 70px;
+    color: #222;
+}
 
-    .content p{
-       margin: 10px 0 30px;
-       color: #333; 
+.content p{
+    margin: 10px 0 30px;
+    color: #333; 
+}
 
-    }
+.buttons .btn{
+    padding: 15px 40px;
+    font-size: 16px;
+}
 
-    .content .btn{
-        padding: 15px 80px;
-        font-size: 16px;
-    }
-
-    .btn:hover{
-        border-top-right-radius: 30px;
-    }
-
-    .btn.light {
+.btn.light {
     background: #ffffff;
     color: #111;
     border: 1px solid #ddd;
 }
 
-    .extra-links {
-    text-align: center;
-    margin-top: 15px;
+/* PROFILE DROPDOWN */
+
+.profile-dropdown{
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.profile-icon{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid #ddd;
+    transition: 0.3s;
+}
+
+.profile-icon:hover{
+    border-color: #c430d7;
+}
+
+/* dropdown menu */
+.dropdown-menu{
+    position: absolute;
+    top: 55px;
+    right: 0;
+    background: #fff;
+    min-width: 150px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 999;
+}
+
+.dropdown-menu a{
+    padding: 12px 15px;
+    text-decoration: none;
+    color: #333;
     font-size: 14px;
-    }
+    transition: 0.2s;
+}
 
-    .extra-links span {
-        color: #666;
-        margin-right: 5px;
-    }
-
-    /* link style */
-    .extra-links a {
-        color: #6c63ff;
-        text-decoration: none;
-        font-weight: 500;
-        position: relative;
-        transition: all 0.3s ease;
-    }
-
-    /* hover effect */
-    .extra-links a::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        bottom: -2px;
-        width: 0%;
-        height: 2px;
-        background: #6c63ff;
-        transition: width 0.3s ease;
-    }
-
-    .extra-links a:hover {
-        color: #4b42d6;
-    }
-
-    /* underline animation */
-    .extra-links a:hover::after {
-        width: 100%;
-    }
+.dropdown-menu a:hover{
+    background: #f3f3f3;
+}
