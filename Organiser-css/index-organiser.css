@@ -1,0 +1,146 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.hero{
+    width: 100%;
+    min-height: 100vh;
+    padding:20px 0;
+    background-image: url("../images/back-image.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    display: flex;
+    flex-direction: column;
+}
+
+nav.main-nav{
+    padding: 10px 45px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo{
+    width: 140px;
+}
+
+nav ul{
+    display: flex;
+    align-items: center;
+}
+
+nav ul li{
+    list-style: none;
+    margin: 10px 15px;
+}
+
+nav ul li a{
+    text-decoration: none;
+    color: #333;
+    font-weight: 400;
+}
+
+.nav-right{
+    display: flex;
+    align-items: center;
+}
+
+.btn{
+    display: inline-block;
+    text-decoration: none;
+    padding: 10px 25px;
+    color: #fff;
+    background-image: linear-gradient(45deg, #df4881, #c430d7);
+    font-size: 14px;
+    border-radius: 30px;
+    border-top-right-radius: 0;
+    transition: 0.5s;
+}
+
+.btn:hover{
+    border-top-right-radius: 30px;
+}
+
+.content{
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;      
+    text-align: center;      
+}
+
+.content h1{
+    font-size: 70px;
+    color: #222;
+}
+
+.content p{
+    margin: 10px 0 30px;
+    color: #333; 
+}
+
+.buttons .btn{
+    padding: 15px 40px;
+    font-size: 16px;
+}
+
+.btn.light {
+    background: #ffffff;
+    color: #111;
+    border: 1px solid #ddd;
+}
+
+/* PROFILE DROPDOWN */
+
+.profile-dropdown{
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.profile-icon{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid #ddd;
+    transition: 0.3s;
+}
+
+.profile-icon:hover{
+    border-color: #c430d7;
+}
+
+/* dropdown menu */
+.dropdown-menu{
+    position: absolute;
+    top: 55px;
+    right: 0;
+    background: #fff;
+    min-width: 150px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 999;
+}
+
+.dropdown-menu a{
+    padding: 12px 15px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.dropdown-menu a:hover{
+    background: #f3f3f3;
+}

@@ -50,7 +50,7 @@ if (isset($_SESSION['user_id'])) {
 
     <ul>
         <li><a href="../Participant/index(participant).php">Home</a></li>
-        <li><a href=../Participant/competition-list.php" class="active">Competition List</a></li>
+        <li><a href="../Participant/competition-list.php" class="active">Competition List</a></li>
         <li><a href="../Participant/about.php">About</a></li>
         <li><a href="../Participant/contact.php">Contact</a></li>
     </ul>
