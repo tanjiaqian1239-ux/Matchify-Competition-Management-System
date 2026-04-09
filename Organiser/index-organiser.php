@@ -13,7 +13,7 @@
         <img src="../images/logo.png" class="logo">
         <ul>
             <li><a href="index.php">Home</a></li>
-            <li><a href="#">Competition List</a></li>
+            <li><a href="../organiser/competition-list.php">Competition List</a></li>
             <li><a href="#">About</a></li>
             <li><a href="#">Contact</a></li>
         </ul>

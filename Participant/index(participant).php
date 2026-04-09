@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="../images/logo.png">
     <title>Mathchify Competition Management System</title>
-    <link rel="stylesheet" href="../css/index-participant.css">
+    <link rel="stylesheet" href="../Participant-css/index-participant.css">
 </head>
 <body>
     <div class="hero">
     <nav>
         <img src="../images/logo.png" class="logo">
         <ul>
-            <li><a href="index.php">Home</a></li>
-            <li><a href="#">Competition List</a></li>
+            <li><a href="../Participant/index(participant).php">Home</a></li>
+            <li><a href="../Participant/competition-list.php">Competition List</a></li>
             <li><a href="#">About</a></li>
             <li><a href="#">Contact</a></li>
         </ul>
