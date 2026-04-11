@@ -18,7 +18,7 @@
             <li><a href="index.php">Home</a></li>
             <li><a href="competition_list.php">Competition List</a></li>
             <li><a href="about.php" class="active">About</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><a href="contact.php">Contact</a></li>
         </ul>
         <a href="login.php" class="btn">Login</a>
     </nav>
