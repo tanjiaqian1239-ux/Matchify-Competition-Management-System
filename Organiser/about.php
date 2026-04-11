@@ -28,9 +28,10 @@ if (isset($_SESSION['user_id'])) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matchify Competition Management Platform</title>
 <link rel="icon" type="image/png" href="../images/logo.png">
-<title>Matchify Competition Management System</title>
-<link rel="stylesheet" href="../Participant-css/index-participant.css">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../Organiser-css/about.css">
 </head>
 
 <body>
@@ -38,12 +39,13 @@ if (isset($_SESSION['user_id'])) {
 <div class="hero">
 
 <nav class="main-nav">
+
     <img src="../images/logo.png" class="logo">
 
     <ul>
-        <li><a href="../Participant/index(participant).php">Home</a></li>
-        <li><a href="../Participant/competition-list.php">Competition List</a></li>
-        <li><a href="../Participant/about.php">About</a></li>
+        <li><a href="../Organiser/index-organiser.php">Home</a></li>
+        <li><a href="../Organiser/competition-list.php">Competition List</a></li>
+        <li><a href="../Organiser/about.php" class="active">About</a></li>
         <li><a href="#">Contact</a></li>
     </ul>
 
@@ -54,6 +56,7 @@ if (isset($_SESSION['user_id'])) {
         <?php else: ?>
             <div class="profile-dropdown">
                 <img src="<?php echo $profile_image; ?>" class="profile-icon" onclick="toggleMenu()">
+
                 <div class="dropdown-menu" id="dropdownMenu">
                     <a href="profile.php">My Profile</a>
                     <a href="../login.php">Logout</a>
@@ -62,17 +65,48 @@ if (isset($_SESSION['user_id'])) {
         <?php endif; ?>
 
     </div>
+
 </nav>
 
-<div class="content">
-    <div class="text-box">
-        <h1>Matchify Competition Platform</h1>
-        <p>Join & Compete with Ease</p>
-        <div class="buttons">
-            <a href="../Participant/competition-list.php" class="btn dark">View Competitions →</a>
-            <a href="#" class="btn light">Get Started</a>
-        </div>
+<div class="about-container">
+
+    <h1>About Matchify</h1>
+
+    <div class="section">
+        <h2>📌 Project Overview</h2>
+        <p>
+            Matchify is a web-based Competition Management System designed to help users browse,
+            join, and manage competitions easily. It provides a centralized platform for participants
+            and administrators to interact efficiently.
+        </p>
     </div>
+
+    <div class="section">
+        <h2>🎯 Mission</h2>
+        <p>
+            Our mission is to simplify competition management by providing a user-friendly platform
+            where users can discover competitions, register, and track their participation seamlessly.
+        </p>
+    </div>
+
+    <div class="section">
+        <h2>⚙️ Key Features</h2>
+        <ul>
+            <li>User Registration & Login</li>
+            <li>Competition Listing with Search</li>
+            <li>Join Competitions</li>
+            <li>Competition Details Page</li>
+            <li>Admin Management</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>👨‍💻 Developer</h2>
+        <p>
+            This system is developed as part of a Final Year Project (FYP).
+        </p>
+    </div>
+
 </div>
 
 </div>

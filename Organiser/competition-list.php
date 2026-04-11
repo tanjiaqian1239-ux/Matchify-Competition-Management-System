@@ -22,7 +22,7 @@ if (isset($_SESSION['user_id'])) {
         $user = $user_query->fetch_assoc();
 
         if (!empty($user['profile_image']) && $user['profile_image'] != "default.png") {
-            $profile_image = "../images/profile/" . $user['profile_image'];
+            $profile_image = "../login.php" . $user['profile_image'];
         }
     }
 }
@@ -49,10 +49,10 @@ if (isset($_SESSION['user_id'])) {
     <img src="../images/logo.png" class="logo">
 
     <ul>
-        <li><a href="../Participant/index(participant).php">Home</a></li>
-        <li><a href=../Participant/competition-list.php" class="active">Competition List</a></li>
-        <li><a href="../Participant/about.php">About</a></li>
-        <li><a href="../Participant/contact.php">Contact</a></li>
+        <li><a href="../Organiser/index(participant).php">Home</a></li>
+        <li><a href="../Organiser/competition-list.php" class="active">Competition List</a></li>
+        <li><a href="../Organiser/about.php">About</a></li>
+        <li><a href="../Organiser/contact.php">Contact</a></li>
     </ul>
 
     <div class="nav-right">

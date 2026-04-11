@@ -46,7 +46,7 @@ if (isset($_SESSION['user_id'])) {
         <li><a href="index(participant).php">Home</a></li>
         <li><a href="competition-list.php">Competition List</a></li>
         <li><a href="about.php" class="active">About</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><a href="../Participant/contact.php">Contact</a></li>
     </ul>
 
     <div class="nav-right">
@@ -59,7 +59,7 @@ if (isset($_SESSION['user_id'])) {
 
                 <div class="dropdown-menu" id="dropdownMenu">
                     <a href="profile.php">My Profile</a>
-                    <a href="../logout.php">Logout</a>
+                    <a href="../login.php">Logout</a>
                 </div>
             </div>
         <?php endif; ?>
