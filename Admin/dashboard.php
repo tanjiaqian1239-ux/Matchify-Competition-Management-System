@@ -26,7 +26,7 @@
             <li>
                 <a href="#">
                     <i class="fas fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
+                    <span>Manage Competition List</span>
                 </a>
             </li>
             <li>

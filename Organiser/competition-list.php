@@ -38,12 +38,12 @@ if (isset($_SESSION['user_id'])) {
 
 <link rel="icon" type="image/png" href="../images/logo.png">
 <link rel="stylesheet" href="../css/style.css">
-<link rel="stylesheet" href="../Organiser-css/competition-list.css">
+<link rel="stylesheet" href="../Organiser-css/competition.css">
 </head>
 
 <body>
 
-<div class="hero">
+<div class="hero  competition-page">
 
 <nav class="main-nav">
     <img src="../images/logo.png" class="logo">
@@ -59,7 +59,7 @@ if (isset($_SESSION['user_id'])) {
 
     <?php if (!isset($_SESSION['user_id'])): ?>
 
-        <a href="login.php" class="btn">Login</a>
+        <a href="../login.php" class="btn">Login</a>
 
     <?php else: ?>
 
@@ -84,6 +84,12 @@ if (isset($_SESSION['user_id'])) {
             <input type="text" name="keyword" placeholder="🔍 Search competitions...">
             <button type="submit" name="search">Search</button>
         </form>
+
+        <?php if (isset($_SESSION['user_id'])): ?>
+            <a href="../Organiser/apply-competition.php" class="btn-apply">
+                Apply Competition
+            </a>
+        <?php endif; ?>
     </div>
 
     <h2 class="title">
