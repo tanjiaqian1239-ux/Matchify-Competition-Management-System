@@ -4,10 +4,10 @@ include "config.php";
 $search = "";
 if (isset($_POST['search'])) {
     $keyword = $conn->real_escape_string($_POST['keyword']);
-    $search = "WHERE title LIKE '%$keyword%'";
+    $search = "AND title LIKE '%$keyword%'";
 }
 
-$sql = "SELECT * FROM competitions $search ORDER BY deadline ASC";
+$sql = "SELECT * FROM competition_applications WHERE status='approved' $search ORDER BY start_date ASC";
 $result = $conn->query($sql);
 ?>
 
@@ -56,20 +56,20 @@ $result = $conn->query($sql);
             <?php while($row = $result->fetch_assoc()): ?>
 
             <div class="card">
-                <img src="images/competition_banner.jpg" class="card-img">
+                <img src="<?= !empty($row['competition_image']) ? 'uploads/'.$row['competition_image'] : 'images/competition_banner.jpg' ?>" class="card-img">
 
                 <div class="card-body">
 
                     <div class="card-header">
-                        <h3><?php echo $row['title']; ?></h3>
+                        <h3><?php echo htmlspecialchars($row['title']); ?></h3>
                     </div>
 
                     <p class="desc">
-                        <?php echo substr($row['description'], 0, 90); ?>...
+                        <?php echo htmlspecialchars(substr($row['description'], 0, 90)); ?>...
                     </p>
 
                     <p class="deadline">
-                        📅 Deadline: <?php echo $row['deadline']; ?>
+                        📅 Start: <?php echo $row['start_date']; ?> → End: <?php echo $row['end_date']; ?>
                     </p>
 
                     <div class="buttons">

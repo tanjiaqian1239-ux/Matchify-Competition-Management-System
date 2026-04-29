@@ -5,10 +5,10 @@ include "../config.php";
 $search = "";
 if (isset($_POST['search'])) {
     $keyword = $conn->real_escape_string($_POST['keyword']);
-    $search = "WHERE title LIKE '%$keyword%'";
+    $search = "AND title LIKE '%$keyword%'";
 }
 
-$sql = "SELECT * FROM competitions $search ORDER BY deadline ASC";
+$sql = "SELECT * FROM competition_applications WHERE status='approved' $search ORDER BY start_date ASC";
 $result = $conn->query($sql);
 
 $profile_image = "../images/profile.avif";
@@ -97,7 +97,7 @@ if (isset($_SESSION['user_id'])) {
         <?php while($row = $result->fetch_assoc()): ?>
 
         <div class="card">
-            <img src="../images/competition_banner.jpg" class="card-img">
+            <img src="<?= !empty($row['competition_image']) ? '../uploads/'.$row['competition_image'] : '../images/competition_banner.jpg' ?>" class="card-img">
 
             <div class="card-body">
 
@@ -108,7 +108,7 @@ if (isset($_SESSION['user_id'])) {
                 </p>
 
                 <p class="deadline">
-                    📅 Deadline: <?php echo $row['deadline']; ?>
+                    📅 Start: <?php echo $row['start_date']; ?> → End: <?php echo $row['end_date']; ?>
                 </p>
 
                 <div class="buttons">

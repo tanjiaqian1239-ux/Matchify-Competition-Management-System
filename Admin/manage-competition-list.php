@@ -61,47 +61,18 @@ if ($status == 'all') {
 <link rel="stylesheet" href="../Admin-css/manage-competition-list.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
 
+<!-- SIDEBAR -->
 <div class="sidebar">
     <ul class="menu">
-        <li>
-            <a href="dashboard.php">
-                <i class="fas fa-tachometer-alt"></i>
-                <span>Dashboard</span>
-            </a>
-        </li>
-
-        <li class="active">
-            <a href="manage-competition-list.php">
-                <i class="fas fa-list-check"></i>
-                <span>Manage Competition</span>
-            </a>
-        </li>
+        <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+        <li class="active"><a href="manage-competition-list.php"><i class="fas fa-list-check"></i><span>Manage Competition</span></a></li>
     </ul>
-
     <div class="logout">
-        <a href="../login.php">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Logout</span>
-        </a>
+        <a href="../login.php"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
     </div>
-</div>
-
-<!-- REJECT POPUP -->
-<div class="overlay" id="overlay"></div>
-
-<div class="popup" id="rejectPopup">
-    <h3>Reject Competition</h3>
-
-    <form method="POST" id="rejectForm">
-        <textarea name="reason" id="rejectReason" required placeholder="Reason..."></textarea>
-
-        <div class="popup--buttons">
-            <button type="button" onclick="closePopup()">Cancel</button>
-            <button type="submit">Reject</button>
-        </div>
-    </form>
 </div>
 
 <!-- MAIN -->
@@ -116,28 +87,19 @@ if ($status == 'all') {
 
 <!-- TABS -->
 <div class="tab--container">
+    <a href="?status=all" class="tab <?=($status=='all')?'active':''?>">All</a>
 
-<a href="?status=all" class="tab <?=($status=='all')?'active':''?>">
-All
-</a>
+    <a href="?status=pending" class="tab <?=($status=='pending')?'active':''?>">
+        Pending <span class="tab-badge orange"><?=$pendingCount?></span>
+    </a>
 
-<a href="?status=pending" class="tab <?=($status=='pending')?'active':''?>">
-Pending
-<span class="tab-badge orange"><?=$pendingCount?></span>
-</a>
+    <a href="?status=approved" class="tab <?=($status=='approved')?'active':''?>">
+        Approved <span class="tab-badge purple"><?=$approvedCount?></span>
+    </a>
 
-<a href="?status=approved" class="tab <?=($status=='approved')?'active':''?>">
-Approved
-<span class="tab-badge purple"><?=$approvedCount?></span>
-</a>
-
-<a href="?status=rejected" class="tab <?=($status=='rejected')?'active':''?>">
-Rejected
-<span class="tab-badge" style="background:red;color:white;">
-<?=$rejectedCount?>
-</span>
-</a>
-
+    <a href="?status=rejected" class="tab <?=($status=='rejected')?'active':''?>">
+        Rejected <span class="tab-badge" style="background:red"><?=$rejectedCount?></span>
+    </a>
 </div>
 
 <!-- LIST -->
@@ -147,72 +109,66 @@ Rejected
 
 <div class="proposal--card">
 
-    <!-- IMAGE -->
-    <img src="<?= $img ?>" class="comp-img">
+  <?php
+    $img = !empty($row['competition_image'])
+        ? '../uploads/'.$row['competition_image']
+        : '../images/default.png';
+    ?>
 
-    <!-- INFO BLOCK -->
+    <img class="comp-img" 
+     src="<?= $img ?>" 
+     style="width:180px;height:130px;min-width:180px;max-width:180px;object-fit:cover;">
+
+    <!-- INFO -->
     <div class="info">
 
         <!-- ROW 1 -->
         <div class="row">
-            <h3 class="title"><?= htmlspecialchars($row['title']) ?></h3>
+            <h3><?= htmlspecialchars($row['title']) ?></h3>
 
             <span class="time">
-                🕒 <?= date("d M Y, h:i A", strtotime($row['created_at'])) ?>
+                Applied Time: <?= date("d M Y, h:i A", strtotime($row['created_at'])) ?>
             </span>
         </div>
 
         <!-- ROW 2 -->
         <div class="row">
-            <p class="small">📌 <?= htmlspecialchars($row['category']) ?></p>
-            <p class="small">📅 <?= $row['start_date'] ?> → <?= $row['end_date'] ?></p>
+            <span>📌 Category: <?= htmlspecialchars($row['category']) ?></span>
+            <span>📅 Start: <?= $row['start_date'] ?> → End: <?= $row['end_date'] ?></span>
         </div>
 
         <!-- ROW 3 -->
         <div class="row">
-            <p class="small">👤 <?= htmlspecialchars($row['organizer'] ?? 'N/A') ?></p>
-            <p class="small">📧 <?= htmlspecialchars($row['email'] ?? 'N/A') ?></p>
+            <span>👤 Organizer: <?= htmlspecialchars($row['organizer'] ?? 'N/A') ?></span>
+            <span>📧 Email: <?= htmlspecialchars($row['email'] ?? 'N/A') ?></span>
         </div>
 
-        <!-- APPROVED / REJECTED TIME -->
-        <?php if ($row['status'] == 'approved' && !empty($row['approved_at'])): ?>
-            <p class="time ok">
-                ✅ Approved:
-                <?= date("d M Y, h:i A", strtotime($row['approved_at'])) ?>
-            </p>
-        <?php endif; ?>
-
-        <?php if ($row['status'] == 'rejected' && !empty($row['rejected_at'])): ?>
-            <p class="time bad">
-                ❌ Rejected:
-                <?= date("d M Y, h:i A", strtotime($row['rejected_at'])) ?>
-            </p>
-        <?php endif; ?>
-
-        <!-- STATUS + BUTTON -->
-        <div class="bottom-row">
-
-            <span class="status <?= $row['status'] ?>">
-                <?= strtoupper($row['status']) ?>
-            </span>
-
-            <div class="btn-group">
-
-                <?php if($row['status']=="pending"): ?>
-
-                <a class="approve" href="?id=<?= $row['id'] ?>&action=approve">
-                    Approve
-                </a>
-
-                <button class="reject" onclick="openPopup(<?= $row['id'] ?>)">
-                    Reject
-                </button>
-
-                <?php endif; ?>
-
+        <!-- APPROVE / REJECT TIME -->
+        <?php if($row['status'] == 'approved' && !empty($row['approved_at'])): ?>
+            <div class="row">
+                <span class="ok">Approved: <?= $row['approved_at'] ?></span>
             </div>
+        <?php endif; ?>
 
-        </div>
+        <?php if($row['status'] == 'rejected' && !empty($row['rejected_at'])): ?>
+            <div class="row">
+                <span class="bad">Rejected: <?= $row['rejected_at'] ?></span>
+            </div>
+        <?php endif; ?>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right">
+
+        <span class="status <?= $row['status'] ?>">
+            <?= strtoupper($row['status']) ?>
+        </span>
+
+        <?php if($row['status']=="pending"): ?>
+            <a class="approve" href="?id=<?=$row['id']?>&action=approve">Approve</a>
+            <button class="reject" onclick="openPopup(<?=$row['id']?>)">Reject</button>
+        <?php endif; ?>
 
     </div>
 
@@ -221,6 +177,22 @@ Rejected
 <?php endwhile; ?>
 
 </div>
+</div>
+
+<!-- POPUP -->
+<div class="overlay" id="overlay"></div>
+
+<div class="popup" id="rejectPopup">
+    <h3>Reject Competition</h3>
+
+    <form method="POST" id="rejectForm">
+        <textarea name="reason" required placeholder="Reason..."></textarea>
+
+        <div class="popup--buttons">
+            <button type="button" onclick="closePopup()">Cancel</button>
+            <button type="submit">Reject</button>
+        </div>
+    </form>
 </div>
 
 <script>
