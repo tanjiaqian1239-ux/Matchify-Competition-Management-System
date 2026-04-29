@@ -74,11 +74,11 @@ if (isset($_SESSION['user_id'])) {
 
 <h1>Apply Online Competition</h1>
 
-<form action="submit-competition.php" method="POST">
+<form action="submit-competition.php" method="POST" enctype="multipart/form-data">
 
     <input type="text" name="title" placeholder="Competition Name" required>
 
-   <select name="category" required>
+    <select name="category" required>
 
         <option value="">-- Select Category --</option>
 
@@ -106,6 +106,10 @@ if (isset($_SESSION['user_id'])) {
     <input type="date" name="end_date">
 
     <input type="number" name="participants" placeholder="Expected Participants">
+
+    <!-- UPLOAD COMPETITION IMAGE -->
+    <label>Upload Competition Image</label>
+    <input type="file" name="competition_image" accept="image/*">
 
     <input type="hidden" name="status" value="pending">
 

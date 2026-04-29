@@ -8,7 +8,7 @@ if (isset($_SESSION['user_id'])) {
     $user_id = (int) $_SESSION['user_id'];
 
     $user_query = $conn->query("SELECT profile_image FROM users WHERE id = $user_id");
-
+  
     if ($user_query && $user_query->num_rows > 0) {
         $user = $user_query->fetch_assoc();
 

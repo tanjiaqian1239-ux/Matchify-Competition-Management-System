@@ -59,7 +59,7 @@ if (isset($_SESSION['user_id'])) {
 
     <?php if (!isset($_SESSION['user_id'])): ?>
 
-        <a href="login.php" class="btn">Login</a>
+        <a href="../login.php" class="btn">Login</a>
 
     <?php else: ?>
 

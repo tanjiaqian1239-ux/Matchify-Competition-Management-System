@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    <link rel="icon" type="image/png" href="../images/logo.png">
     <link rel="stylesheet" href="../Admin-css/dashboard.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
@@ -24,7 +25,7 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="../Admin/manage-competition-list.php">
                     <i class="fas fa-tachometer-alt"></i>
                     <span>Manage Competition List</span>
                 </a>

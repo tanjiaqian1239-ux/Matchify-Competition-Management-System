@@ -24,7 +24,7 @@ if (isset($_SESSION['user_id'])) {
         if (!empty($user['profile_image']) && $user['profile_image'] != "default.png") {
             $profile_image = "../login.php" . $user['profile_image'];
         }
-    }
+    } 
 }
 ?>
 
