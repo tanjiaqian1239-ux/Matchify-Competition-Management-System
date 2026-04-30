@@ -1,0 +1,342 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+*{
+    margin:0;
+    padding:0;
+    border:none;
+    outline:none;
+    box-sizing:border-box;
+    font-family:"Poppins",sans-serif;
+}
+
+body{
+    display:flex;
+    min-height:100vh;
+    background:#ebe9e9;
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar{
+    position:sticky;
+    top:0;
+    left:0;
+    bottom:0;
+    width:80px;
+    height:100vh;
+    padding:0 1rem;
+    color:#fff;
+    overflow-y:visible;
+    transition:all 0.5s linear;
+    background:rgba(113,99,186,155);
+}
+
+.sidebar:hover{
+    width:300px;   
+    transition: 1.5s;
+}
+
+
+.logo{
+    height:80px;
+    padding:16px;
+}
+
+.menu{
+    height:88%;
+    position:relative;
+    list-style:none;
+    padding:0;
+}
+
+.menu li{
+    padding:1rem;
+    margin:8px 0;
+    border-radius:8px;
+    transition:all 0.3s ease;
+    white-space: nowrap;
+}
+
+.menu li:hover,
+.menu li.active{
+    background:#e0e0e058;
+}
+
+.menu a{
+    color:#fff;
+    font-size:14px;
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    gap:1rem;
+    width:100%;
+    white-space:nowrap;
+    flex-shrink: 0;
+}
+
+.menu a i{
+    font-size:1.15rem;
+    min-width:22px;
+    text-align:center;
+}
+
+.menu a span{
+    opacity:0;
+    transition:0.3s;
+}
+
+.sidebar:hover .menu a span{
+    opacity:1;
+}
+
+.logout{
+    position:absolute;
+    bottom:40px;
+    left:0;
+    width:100%;
+}
+
+/* ================= MAIN CONTENT ================= */
+.main--content{
+    width:100%;
+    padding:1rem;
+    background:#ebe9e9;
+}
+
+/* ================= HEADER ================= */
+.header--wrapper{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    background:#fff;
+    border-radius:10px;
+    padding:10px 2rem;
+    margin-bottom:1rem;
+}
+
+.header--title{
+    color:rgba(113,90,186,255);
+}
+
+.header--title span{
+    font-size:13px;
+    color:#888;
+}
+
+.header--title h2{
+    font-size:22px;
+}
+
+/* ================= TABS ================= */
+.tab--container{
+    display:flex;
+    background:#e9e9e9;
+    border-radius:20px;
+    padding:5px;
+    gap:10px;
+    margin-bottom:1.5rem;
+}
+
+.tab{
+    flex:1;
+    text-align:center;
+    padding:10px;
+    border-radius:20px;
+    text-decoration:none;
+    color:#333;
+    font-size:14px;
+}
+
+.tab.active{
+    background:#fff;
+    font-weight:600;
+}
+
+.tab-badge{
+    padding:3px 8px;
+    border-radius:10px;
+    font-size:12px;
+    margin-left:5px;
+    color:#fff;
+}
+
+.orange{
+    background:orange;
+}
+
+.purple{
+    background:purple;
+}
+
+/* ================= TABLE ================= */
+.table--container{
+    background:#fff;
+    padding:2rem;
+    border-radius:10px;
+}
+
+/* ================= CARD ================= */
+.proposal--card{
+    display:flex;
+    gap:20px;
+    align-items:flex-start;
+    background:#fff;
+    border-radius:12px;
+    padding:16px;
+    margin-bottom:15px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.comp-img{
+    width:180px;
+    height:130px;
+    min-width:180px;
+    object-fit:cover;
+    border-radius:12px;
+}
+
+.info{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.row h3{
+    font-size:16px;
+    color:#222;
+}
+
+.time{
+    font-size:13px;
+    color:#777;
+}
+
+.ok{
+    color:green;
+}
+
+.bad{
+    color:red;
+}
+
+/* ================= RIGHT ================= */
+.right{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:10px;
+    min-width:130px;
+}
+
+.status{
+    padding:6px 12px;
+    border-radius:15px;
+    font-size:12px;
+    font-weight:600;
+}
+
+.pending{
+    background:#fff4cc;
+    color:orange;
+}
+
+.approved{
+    background:#e0e7ff;
+    color:blue;
+}
+
+.rejected{
+    background:#ffe0e0;
+    color:red;
+}
+
+.approve,
+.reject{
+    width:100%;
+    text-align:center;
+    text-decoration:none;
+    padding:10px 16px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:13px;
+}
+
+.approve{
+    background:green;
+    color:#fff;
+}
+
+.reject{
+    background:#fff;
+    border:2px solid red;
+    color:red;
+}
+
+/* ================= POPUP ================= */
+.overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.4);
+    z-index:1000;
+}
+
+.overlay.show{
+    display:block;
+}
+
+.popup{
+    display:none;
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    background:#fff;
+    padding:2rem;
+    border-radius:12px;
+    width:420px;
+    z-index:1001;
+}
+
+.popup.show{
+    display:block;
+}
+
+.popup h3{
+    margin-bottom:1rem;
+}
+
+.popup textarea{
+    width:100%;
+    height:120px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    padding:10px;
+    resize:none;
+}
+
+.popup--buttons{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:1rem;
+}
+
+.popup--buttons button{
+    padding:8px 16px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.popup--buttons button[type="submit"]{
+    background:red;
+    color:#fff;
+}

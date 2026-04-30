@@ -2,7 +2,8 @@
 session_start();
 include "../config.php";
 
-/* PROFILE IMAGE */
+$today = date('Y-m-d');
+
 $profile_image = "../images/profile.avif";
 
 if (isset($_SESSION['user_id'])) {
@@ -38,7 +39,6 @@ if (isset($_SESSION['user_id'])) {
 
 <div class="hero">
 
-<!-- NAV -->
 <nav class="main-nav">
 
     <img src="../images/logo.png" class="logo">
@@ -69,7 +69,6 @@ if (isset($_SESSION['user_id'])) {
 
 </nav>
 
-<!-- FORM -->
 <div class="form-wrapper">
 
 <h1>Apply Online Competition</h1>
@@ -79,35 +78,24 @@ if (isset($_SESSION['user_id'])) {
     <input type="text" name="title" placeholder="Competition Name" required>
 
     <select name="category" required>
-
         <option value="">-- Select Category --</option>
-
         <option value="esports">🎮 E-Sports</option>
-
         <option value="tech">💻 Technology / Programming</option>
-
         <option value="academic">🧠 Academic</option>
-
         <option value="creative">🎨 Creative & Design</option>
-
         <option value="business">📊 Business & Innovation</option>
-
         <option value="sports">🏃 Sports & Physical</option>
-
         <option value="entertainment">🎤 Entertainment</option>
-
         <option value="others">🌍 General / Others</option>
-
     </select>
 
     <textarea name="description" placeholder="Description"></textarea>
 
-    <input type="date" name="start_date">
-    <input type="date" name="end_date">
+    <input type="date" name="start_date" min="<?= $today ?>" required>
+    <input type="date" name="end_date" min="<?= $today ?>" required>
 
     <input type="number" name="participants" placeholder="Expected Participants">
 
-    <!-- UPLOAD COMPETITION IMAGE -->
     <label>Upload Competition Image</label>
     <input type="file" name="competition_image" accept="image/*">
 
@@ -126,6 +114,11 @@ function toggleMenu(){
     const menu = document.getElementById("dropdownMenu");
     menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
 }
+
+// end date must be after start date
+document.querySelector('[name="start_date"]').addEventListener('change', function() {
+    document.querySelector('[name="end_date"]').min = this.value;
+});
 </script>
 
 </body>

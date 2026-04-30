@@ -66,14 +66,54 @@ if ($status == 'all') {
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-    <ul class="menu">
-        <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-        <li class="active"><a href="manage-competition-list.php"><i class="fas fa-list-check"></i><span>Manage Competition</span></a></li>
-    </ul>
-    <div class="logout">
-        <a href="../login.php"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+        <div class="logo"></div>
+        <ul class="menu">
+            <li class="active">
+                <a href="#" >
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </a>
+            </li>
+            <li>
+                <a href="../Admin/manage-competition-list.php">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Manage 
+                        Competition 
+                        List</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+            <li class="logout">
+                <a href="#" >
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
     </div>
-</div>
 
 <!-- MAIN -->
 <div class="main--content">
