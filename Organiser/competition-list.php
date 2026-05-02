@@ -2,15 +2,50 @@
 session_start();
 include "../config.php";
 
+/* =========================
+   SEARCH + CATEGORY FILTER
+========================= */
 $search = "";
+$category_filter = "";
+
+$selected_category = "All";
+
+if (isset($_GET['category']) && $_GET['category'] != "") {
+    $selected_category = $_GET['category'];
+
+    if ($selected_category != "All") {
+        $safe_category = $conn->real_escape_string($selected_category);
+        $category_filter = "AND category='$safe_category'";
+    }
+}
+
 if (isset($_POST['search'])) {
     $keyword = $conn->real_escape_string($_POST['keyword']);
     $search = "AND title LIKE '%$keyword%'";
 }
 
-$sql = "SELECT * FROM competition_applications WHERE status='approved' $search ORDER BY start_date ASC";
+/* =========================
+   GET CATEGORY LIST
+========================= */
+$category_sql = "SELECT DISTINCT category FROM competition_applications 
+                 WHERE status='approved' AND category IS NOT NULL AND category != ''
+                 ORDER BY category ASC";
+$category_result = $conn->query($category_sql);
+
+/* =========================
+   GET COMPETITIONS
+========================= */
+$sql = "SELECT * FROM competition_applications 
+        WHERE status='approved' 
+        $search 
+        $category_filter
+        ORDER BY start_date ASC";
+
 $result = $conn->query($sql);
 
+/* =========================
+   PROFILE IMAGE
+========================= */
 $profile_image = "../images/profile.avif";
 
 if (isset($_SESSION['user_id'])) {
@@ -24,7 +59,7 @@ if (isset($_SESSION['user_id'])) {
         if (!empty($user['profile_image']) && $user['profile_image'] != "default.png") {
             $profile_image = "../login.php" . $user['profile_image'];
         }
-    } 
+    }
 }
 ?>
 
@@ -38,14 +73,15 @@ if (isset($_SESSION['user_id'])) {
 
 <link rel="icon" type="image/png" href="../images/logo.png">
 <link rel="stylesheet" href="../css/style.css">
-<link rel="stylesheet" href="../Organiser-css/competition.css">
+<link rel="stylesheet" href="../Organiser-css/competitionlist.css">
 </head>
 
 <body>
 
-<div class="hero  competition-page">
+<div class="hero competition-page">
 
 <nav class="main-nav">
+
     <img src="../images/logo.png" class="logo">
 
     <ul>
@@ -75,11 +111,13 @@ if (isset($_SESSION['user_id'])) {
     <?php endif; ?>
 
     </div>
+
 </nav>
 
 <div class="container">
 
     <div class="top-bar">
+
         <form method="POST" class="search-box">
             <input type="text" name="keyword" placeholder="🔍 Search competitions...">
             <button type="submit" name="search">Search</button>
@@ -90,6 +128,24 @@ if (isset($_SESSION['user_id'])) {
                 Apply Competition
             </a>
         <?php endif; ?>
+
+    </div>
+
+    <!-- CATEGORY FILTER -->
+    <div class="category-bar">
+
+        <a href="competition-list.php?category=All"
+           class="cat-btn <?php if($selected_category=="All") echo 'active'; ?>">
+           All
+        </a>
+
+        <?php while($cat = $category_result->fetch_assoc()): ?>
+            <a href="competition-list.php?category=<?php echo urlencode($cat['category']); ?>"
+               class="cat-btn <?php if($selected_category==$cat['category']) echo 'active'; ?>">
+               <?php echo htmlspecialchars($cat['category']); ?>
+            </a>
+        <?php endwhile; ?>
+
     </div>
 
     <h2 class="title">
@@ -103,14 +159,19 @@ if (isset($_SESSION['user_id'])) {
         <?php while($row = $result->fetch_assoc()): ?>
 
         <div class="card">
+
             <img src="<?= !empty($row['competition_image']) ? '../uploads/'.$row['competition_image'] : '../images/competition_banner.jpg' ?>" class="card-img">
 
             <div class="card-body">
 
+                <span class="tag">
+                    <?php echo htmlspecialchars($row['category']); ?>
+                </span>
+
                 <h3><?php echo htmlspecialchars($row['title']); ?></h3>
 
                 <p class="desc">
-                    <?php echo htmlspecialchars(substr($row['description'], 0, 90)); ?>...
+                    <?php echo htmlspecialchars(substr($row['description'],0,90)); ?>...
                 </p>
 
                 <p class="deadline">
@@ -118,6 +179,7 @@ if (isset($_SESSION['user_id'])) {
                 </p>
 
                 <div class="buttons">
+
                     <a href="competition_detail.php?id=<?php echo $row['id']; ?>" class="btn-view">
                         View Details
                     </a>
@@ -125,15 +187,19 @@ if (isset($_SESSION['user_id'])) {
                     <a href="login.php" class="btn-join">
                         Join Now
                     </a>
+
                 </div>
 
             </div>
+
         </div>
 
         <?php endwhile; ?>
 
     <?php else: ?>
+
         <p>No competitions found</p>
+
     <?php endif; ?>
 
     </div>
@@ -153,9 +219,7 @@ document.addEventListener("click", function(e){
     const menu = document.getElementById("dropdownMenu");
 
     if (dropdown && !dropdown.contains(e.target)) {
-        if (menu) {
-            menu.style.display = "none";
-        }
+        menu.style.display = "none";
     }
 });
 </script>

@@ -4,8 +4,8 @@ include "../config.php";
 
 $id = intval($_GET['id']);
 
-$stmt = $conn->prepare("SELECT * FROM competition_applications WHERE id=? AND status='approved'");
-$stmt->bind_param("i", $id);
+$stmt = $conn->prepare("SELECT * FROM competition_applications WHERE id=? AND organizer_id=?");
+$stmt->bind_param("ii", $id, $_SESSION['user_id']);
 $stmt->execute();
 $row = $stmt->get_result()->fetch_assoc();
 
@@ -18,11 +18,24 @@ $image = !empty($row['competition_image'])
     ? "../uploads/" . $row['competition_image']
     : "../images/competition_banner.jpg";
 
+$today     = date('Y-m-d');
+$app_start = !empty($row['application_start']) ? trim($row['application_start']) : null;
+$app_end   = !empty($row['application_end'])   ? trim($row['application_end'])   : null;
+
+if (!$app_start || !$app_end) {
+    $btn_status = "open";
+} elseif ($today < $app_start) {
+    $btn_status = "not_open";
+} elseif ($today > $app_end) {
+    $btn_status = "expired";
+} else {
+    $btn_status = "open";
+}
+
 $profile_image = "../images/profile.avif";
 if (isset($_SESSION['user_id'])) {
     $user_id = (int) $_SESSION['user_id'];
     $user_query = $conn->query("SELECT profile_image FROM users WHERE id = $user_id");
-
     if ($user_query && $user_query->num_rows > 0) {
         $user = $user_query->fetch_assoc();
         if (!empty($user['profile_image'])) {
@@ -34,7 +47,6 @@ if (isset($_SESSION['user_id'])) {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,11 +56,7 @@ if (isset($_SESSION['user_id'])) {
     <link rel="icon" type="image/png" href="../images/logo.png">
     <link rel="stylesheet" href="../Participant-css/index-participant.css">
     <style>
-        body {
-            background: #f4f6fb;
-            margin: 0;
-            padding: 0;
-        }
+        body { background: #f4f6fb; margin: 0; padding: 0; }
 
         .hero {
             min-height: 80px !important;
@@ -116,9 +124,20 @@ if (isset($_SESSION['user_id'])) {
             font-size: 13px;
         }
 
-        .detail-body {
-            padding: 35px 40px;
+        .detail-header .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-left: 10px;
         }
+
+        .status-badge.pending  { background: #fef3c7; color: #d97706; }
+        .status-badge.approved { background: #d1fae5; color: #065f46; }
+        .status-badge.rejected { background: #fee2e2; color: #b91c1c; }
+
+        .detail-body { padding: 35px 40px; }
 
         .info-grid {
             display: grid;
@@ -187,20 +206,20 @@ if (isset($_SESSION['user_id'])) {
             flex-shrink: 0;
         }
 
-        .organizer-info .name {
-            font-weight: 600;
-            font-size: 15px;
+        .organizer-info .name { font-weight: 600; font-size: 15px; }
+        .organizer-info .email { font-size: 13px; color: #888; }
+
+        .reject-box {
+            background: #fff0f0;
+            border-left: 4px solid #ef4444;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #b91c1c;
         }
 
-        .organizer-info .email {
-            font-size: 13px;
-            color: #888;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-        }
+        .action-buttons { display: flex; gap: 15px; }
 
         .btn-join {
             flex: 1;
@@ -213,9 +232,13 @@ if (isset($_SESSION['user_id'])) {
             font-weight: 600;
             font-size: 15px;
             transition: opacity 0.3s;
+            border: none;
+            cursor: pointer;
+            display: block;
         }
 
         .btn-join:hover { opacity: 0.85; }
+        .btn-join[disabled] { cursor: not-allowed; opacity: 0.85; }
 
         .btn-back {
             padding: 14px 25px;
@@ -245,10 +268,10 @@ if (isset($_SESSION['user_id'])) {
     <nav class="main-nav">
         <img src="../images/logo.png" class="logo">
         <ul>
-            <li><a href="../Organiser/index-organiser.php">Home</a></li>
-            <li><a href="../Organiser/competition-list.php" class="active">Competition List</a></li>
-            <li><a href="../Organiser/about.php">About</a></li>
-            <li><a href="../Organiser/contact.php">Contact</a></li>
+            <li><a href="index-organiser.php">Home</a></li>
+            <li><a href="competition-list.php" class="active">Competition List</a></li>
+            <li><a href="about.php">About</a></li>
+            <li><a href="contact.php">Contact</a></li>
         </ul>
         <div class="nav-right">
             <?php if (!isset($_SESSION['user_id'])): ?>
@@ -276,26 +299,41 @@ if (isset($_SESSION['user_id'])) {
         <div class="detail-header">
             <h1><?= htmlspecialchars($row['title']) ?></h1>
             <span class="category-badge">📌 <?= htmlspecialchars($row['category']) ?></span>
+            <span class="status-badge <?= $row['status'] ?>"><?= strtoupper($row['status']) ?></span>
         </div>
 
         <div class="detail-body">
 
+            <?php if ($row['status'] == 'rejected' && !empty($row['reject_reason'])): ?>
+            <div class="reject-box">
+                ❌ Rejected Reason: <?= htmlspecialchars($row['reject_reason']) ?>
+            </div>
+            <?php endif; ?>
+
             <div class="info-grid">
                 <div class="info-box">
-                    <div class="label">📅 Start Date</div>
+                    <div class="label">📅 Competition Start</div>
                     <div class="value"><?= $row['start_date'] ?></div>
                 </div>
                 <div class="info-box">
-                    <div class="label">🏁 End Date</div>
+                    <div class="label">🏁 Competition End</div>
                     <div class="value"><?= $row['end_date'] ?></div>
+                </div>
+                <div class="info-box">
+                    <div class="label">📋 Application Start</div>
+                    <div class="value"><?= $app_start ?? 'N/A' ?></div>
+                </div>
+                <div class="info-box">
+                    <div class="label">⏰ Application End</div>
+                    <div class="value"><?= $app_end ?? 'N/A' ?></div>
                 </div>
                 <div class="info-box">
                     <div class="label">📧 Contact Email</div>
                     <div class="value"><?= htmlspecialchars($row['email'] ?? 'N/A') ?></div>
                 </div>
                 <div class="info-box">
-                    <div class="label">✅ Status</div>
-                    <div class="value" style="color:#27ae60;">Approved</div>
+                    <div class="label">👥 Expected Participants</div>
+                    <div class="value"><?= $row['participants'] ?? 'N/A' ?></div>
                 </div>
             </div>
 
@@ -315,7 +353,34 @@ if (isset($_SESSION['user_id'])) {
 
             <div class="action-buttons">
                 <a href="competition-list.php" class="btn-back">← Back</a>
-                <a href="../login.php" class="btn-join">Join Now 🚀</a>
+
+                <?php if ($row['status'] === 'approved'): ?>
+
+                    <?php if ($btn_status === 'open'): ?>
+                        <a href="../Participant/apply_competition.php?id=<?= $row['id'] ?>" class="btn-join">Join Now 🚀</a>
+
+                    <?php elseif ($btn_status === 'not_open'): ?>
+                        <button class="btn-join" disabled style="background:#f0a500;">
+                            Opens <?= date("d M Y", strtotime($app_start)) ?> 🕐
+                        </button>
+
+                    <?php else: ?>
+                        <button class="btn-join" disabled style="background:#aaa;">
+                            Application Closed ❌
+                        </button>
+                    <?php endif; ?>
+
+                <?php elseif ($row['status'] === 'pending'): ?>
+                    <button class="btn-join" disabled style="background:#f0a500;">
+                        ⏳ Pending Admin Approval
+                    </button>
+
+                <?php else: ?>
+                    <button class="btn-join" disabled style="background:#ccc;color:#888;">
+                        Application Rejected
+                    </button>
+                <?php endif; ?>
+
             </div>
 
         </div>

@@ -75,6 +75,9 @@ if (isset($_SESSION['user_id'])) {
 
 <form action="submit-competition.php" method="POST" enctype="multipart/form-data">
 
+    <!-- BASIC INFO -->
+    <div class="section-label">📋 Basic Information</div>
+
     <input type="text" name="title" placeholder="Competition Name" required>
 
     <select name="category" required>
@@ -89,15 +92,59 @@ if (isset($_SESSION['user_id'])) {
         <option value="others">🌍 General / Others</option>
     </select>
 
-    <textarea name="description" placeholder="Description"></textarea>
+    <textarea name="description" placeholder="Competition Description" rows="4" required></textarea>
 
-    <input type="date" name="start_date" min="<?= $today ?>" required>
-    <input type="date" name="end_date" min="<?= $today ?>" required>
+    <input type="number" name="participants" placeholder="Expected Participants" min="1" required>
 
-    <input type="number" name="participants" placeholder="Expected Participants">
+    <!-- APPLICATION PERIOD -->
+    <div class="section-label">📅 Application Period</div>
+    <div class="date-row">
+        <div class="date-group">
+            <span>Application Start</span>
+            <input type="date" name="application_start" min="<?= $today ?>" required>
+        </div>
+        <div class="date-group">
+            <span>Application End</span>
+            <input type="date" name="application_end" min="<?= $today ?>" required>
+        </div>
+    </div>
 
-    <label>Upload Competition Image</label>
-    <input type="file" name="competition_image" accept="image/*">
+    <!-- COMPETITION PERIOD -->
+    <div class="section-label">🏆 Competition Period</div>
+    <div class="date-row">
+        <div class="date-group">
+            <span>Competition Start</span>
+            <input type="date" name="start_date" min="<?= $today ?>" required>
+        </div>
+        <div class="date-group">
+            <span>Competition End</span>
+            <input type="date" name="end_date" min="<?= $today ?>" required>
+        </div>
+    </div>
+
+    <!-- PRIZES -->
+    <div class="section-label">🎁 Prizes</div>
+
+    <div class="prize-row">
+        <span>🥇 1st Place</span>
+        <input type="text" name="prize_1st" placeholder="e.g. RM 500 + Certificate" required>
+    </div>
+
+    <div class="prize-row">
+        <span>🥈 2nd Place</span>
+        <input type="text" name="prize_2nd" placeholder="e.g. RM 300 + Certificate" required>
+    </div>
+
+    <div class="prize-row">
+        <span>🥉 3rd Place</span>
+        <input type="text" name="prize_3rd" placeholder="e.g. RM 100 + Certificate" required>
+    </div>
+
+    <textarea name="prize_description" placeholder="Prize Details (e.g. Cash prizes will be transferred within 30 days after competition ends)" rows="3" required></textarea>
+
+    <!-- IMAGE -->
+    <div class="section-label">🖼️ Competition Image</div>
+    <input type="file" name="competition_image" accept="image/*" required>
 
     <input type="hidden" name="status" value="pending">
 
@@ -115,7 +162,14 @@ function toggleMenu(){
     menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
 }
 
-// end date must be after start date
+document.querySelector('[name="application_start"]').addEventListener('change', function() {
+    document.querySelector('[name="application_end"]').min = this.value;
+});
+
+document.querySelector('[name="application_end"]').addEventListener('change', function() {
+    document.querySelector('[name="start_date"]').min = this.value;
+});
+
 document.querySelector('[name="start_date"]').addEventListener('change', function() {
     document.querySelector('[name="end_date"]').min = this.value;
 });

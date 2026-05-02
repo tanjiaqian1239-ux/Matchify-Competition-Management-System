@@ -44,9 +44,16 @@ $rejectedCount = $conn->query("SELECT COUNT(*) total FROM competition_applicatio
 $status = $_GET['status'] ?? 'all';
 
 if ($status == 'all') {
-    $result = $conn->query("SELECT * FROM competition_applications ORDER BY created_at DESC");
+    $result = $conn->query("SELECT ca.*, u.fullname AS org_name, u.email AS org_email
+                            FROM competition_applications ca
+                            LEFT JOIN users u ON ca.organizer_id = u.id
+                            ORDER BY ca.created_at DESC");
 } else {
-    $stmt = $conn->prepare("SELECT * FROM competition_applications WHERE status=? ORDER BY created_at DESC");
+    $stmt = $conn->prepare("SELECT ca.*, u.fullname AS org_name, u.email AS org_email
+                            FROM competition_applications ca
+                            LEFT JOIN users u ON ca.organizer_id = u.id
+                            WHERE ca.status=?
+                            ORDER BY ca.created_at DESC");
     $stmt->bind_param("s", $status);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -147,41 +154,73 @@ if ($status == 'all') {
 
 <?php while($row = $result->fetch_assoc()): ?>
 
+<?php
+$img       = (!empty($row['competition_image']) && $row['competition_image'] != '0')
+             ? '../uploads/' . $row['competition_image']
+             : '../images/default.png';
+$org_name  = !empty($row['org_name'])  ? $row['org_name']  : ($row['organizer'] ?? 'N/A');
+$org_email = !empty($row['org_email']) ? $row['org_email'] : ($row['email']     ?? 'N/A');
+?>
+
 <div class="proposal--card">
 
-  <?php
-    $img = !empty($row['competition_image'])
-        ? '../uploads/'.$row['competition_image']
-        : '../images/default.png';
-    ?>
-
-    <img class="comp-img" 
-     src="<?= $img ?>" 
-     style="width:180px;height:130px;min-width:180px;max-width:180px;object-fit:cover;">
+    <img class="comp-img"
+         src="<?= htmlspecialchars($img) ?>"
+         onerror="this.src='../images/default.png'"
+         alt="Competition Image">
 
     <!-- INFO -->
     <div class="info">
 
-        <!-- ROW 1 -->
+        <!-- ROW 1: title + time -->
         <div class="row">
             <h3><?= htmlspecialchars($row['title']) ?></h3>
-
-            <span class="time">
-                Applied Time: <?= date("d M Y, h:i A", strtotime($row['created_at'])) ?>
-            </span>
+            <span class="time">Applied Time: <?= date("d M Y, h:i A", strtotime($row['created_at'])) ?></span>
         </div>
 
-        <!-- ROW 2 -->
+        <!-- ROW 2: category + participants -->
         <div class="row">
             <span>📌 Category: <?= htmlspecialchars($row['category']) ?></span>
-            <span>📅 Start: <?= $row['start_date'] ?> → End: <?= $row['end_date'] ?></span>
+            <span>👥 Participants: <?= $row['participants'] ?? 'N/A' ?></span>
         </div>
 
-        <!-- ROW 3 -->
+        <!-- ROW 3: application period -->
         <div class="row">
-            <span>👤 Organizer: <?= htmlspecialchars($row['organizer'] ?? 'N/A') ?></span>
-            <span>📧 Email: <?= htmlspecialchars($row['email'] ?? 'N/A') ?></span>
+            <span>📋 Application: <?= $row['application_start'] ?? 'N/A' ?> → <?= $row['application_end'] ?? 'N/A' ?></span>
         </div>
+
+        <!-- ROW 4: competition period -->
+        <div class="row">
+            <span>📅 Competition: <?= $row['start_date'] ?> → <?= $row['end_date'] ?></span>
+        </div>
+
+        <!-- ROW 5: organizer + email -->
+        <div class="row">
+            <span>👤 Organizer: <?= htmlspecialchars($org_name) ?></span>
+            <span>📧 Email: <?= htmlspecialchars($org_email) ?></span>
+        </div>
+
+        <!-- ROW 6: prizes -->
+        <?php if (!empty($row['prize_1st']) || !empty($row['prize_2nd']) || !empty($row['prize_3rd'])): ?>
+        <div class="row">
+            <?php if (!empty($row['prize_1st'])): ?>
+                <span>🥇 <?= htmlspecialchars($row['prize_1st']) ?></span>
+            <?php endif; ?>
+            <?php if (!empty($row['prize_2nd'])): ?>
+                <span>🥈 <?= htmlspecialchars($row['prize_2nd']) ?></span>
+            <?php endif; ?>
+            <?php if (!empty($row['prize_3rd'])): ?>
+                <span>🥉 <?= htmlspecialchars($row['prize_3rd']) ?></span>
+            <?php endif; ?>
+        </div>
+        <?php endif; ?>
+
+        <!-- ROW 7: prize description -->
+        <?php if (!empty($row['prize_description'])): ?>
+        <div class="row">
+            <span>📝 <?= htmlspecialchars($row['prize_description']) ?></span>
+        </div>
+        <?php endif; ?>
 
         <!-- APPROVE / REJECT TIME -->
         <?php if($row['status'] == 'approved' && !empty($row['approved_at'])): ?>
@@ -193,6 +232,12 @@ if ($status == 'all') {
         <?php if($row['status'] == 'rejected' && !empty($row['rejected_at'])): ?>
             <div class="row">
                 <span class="bad">Rejected: <?= $row['rejected_at'] ?></span>
+            </div>
+        <?php endif; ?>
+
+        <?php if($row['status'] == 'rejected' && !empty($row['reject_reason'])): ?>
+            <div class="row">
+                <span class="bad">Reason: <?= htmlspecialchars($row['reject_reason']) ?></span>
             </div>
         <?php endif; ?>
 
