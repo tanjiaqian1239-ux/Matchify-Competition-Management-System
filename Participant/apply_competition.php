@@ -83,7 +83,7 @@ if (isset($_POST['apply'])) {
         ('$competition_id', '$user_id', '$full_name', '$id_type: $id_number', '$gender', '$email', '$phone', '$address', 'pending')";
 
         if ($conn->query($sql)) {
-            header("Location: my-applications.php");
+            header("Location: ../Participant/my-applications.php");
             exit();
         }
 
