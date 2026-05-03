@@ -35,6 +35,7 @@ $stmt->execute();
 <head>
 <meta charset="UTF-8">
 <title>Competition Updated</title>
+<link rel="icon" type="image/png" href="../images/logo.png">
 <style>
 body{
     font-family:Arial, sans-serif;

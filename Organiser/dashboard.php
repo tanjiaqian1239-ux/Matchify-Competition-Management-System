@@ -243,6 +243,7 @@ $list = $conn->query("
                         <th>Status</th>
                         <th>Category</th>
                         <th>Participants Limit</th>
+                        <th>Application Date</th>
                         <th>Start Date</th>
                         <th>End Date</th>
                         <th>Actions</th>
@@ -267,12 +268,19 @@ $list = $conn->query("
 
                         <td><?php echo $row['participants']; ?></td>
 
+                        <!-- ✅ APPLICATION DATE ADDED -->
+                        <td>
+                            <?php 
+                                echo $row['application_start'] . " ~ " . $row['application_end']; 
+                            ?>
+                        </td>
+
                         <td><?php echo $row['start_date']; ?></td>
 
                         <td><?php echo $row['end_date']; ?></td>
 
                         <td>
-                            <a href="competition-detail.php?id=<?php echo $row['id']; ?>">
+                            <a href="view-competition-detail.php?id=<?php echo $row['id']; ?>">
                                 <i class="fa fa-eye action-icon"></i>
                             </a>
 
