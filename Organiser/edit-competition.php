@@ -35,17 +35,17 @@ $data = $result->fetch_assoc();
 
 $today = date('Y-m-d');
 
-$application_end = $data['application_end'];
+$app_start = $data['application_start'];
+$app_end = $data['application_end'];
 $start_date = $data['start_date'];
 
 $lock_date = date('Y-m-d', strtotime($start_date . ' -1 day'));
 
-$can_edit =
-    ($data['status'] === 'pending') &&
-    ($today <= $application_end) &&
-    ($today < $lock_date);
+$can_edit_page = ($today < $lock_date);
+$can_edit_application = ($today < $app_start);
+$can_edit_competition = ($today < $lock_date);
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && $can_edit) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && $can_edit_page) {
 
     if ($_POST['application_end'] < $_POST['application_start']) {
         die("Invalid application date range");
@@ -108,10 +108,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $can_edit) {
 
 <h1>Edit Competition</h1>
 
-<?php if (!$can_edit): ?>
-    <div class="lock-box">
-        Editing Locked
-    </div>
+<?php if (!$can_edit_page): ?>
+<div class="lock-box">Editing Locked</div>
 <?php endif; ?>
 
 <form method="POST">
@@ -120,84 +118,80 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $can_edit) {
 
 <label>Competition Name</label>
 <input type="text" name="title"
-    value="<?= htmlspecialchars($data['title']) ?>"
-    <?= $can_edit ? '' : 'disabled' ?> required>
+value="<?= htmlspecialchars($data['title']) ?>"
+<?= $can_edit_page ? '' : 'disabled' ?> required>
 
 <label>Category</label>
-<select name="category" <?= $can_edit ? '' : 'disabled' ?> required>
-    <option value="esports" <?= $data['category']=='esports'?'selected':'' ?>>Esports</option>
-    <option value="tech" <?= $data['category']=='tech'?'selected':'' ?>>Tech</option>
-    <option value="academic" <?= $data['category']=='academic'?'selected':'' ?>>Academic</option>
-    <option value="creative" <?= $data['category']=='creative'?'selected':'' ?>>Creative</option>
-    <option value="business" <?= $data['category']=='business'?'selected':'' ?>>Business</option>
-    <option value="sports" <?= $data['category']=='sports'?'selected':'' ?>>Sports</option>
-    <option value="entertainment" <?= $data['category']=='entertainment'?'selected':'' ?>>Entertainment</option>
-    <option value="others" <?= $data['category']=='others'?'selected':'' ?>>Others</option>
+<select name="category" <?= $can_edit_page ? '' : 'disabled' ?> required>
+<option value="esports" <?= $data['category']=='esports'?'selected':'' ?>>Esports</option>
+<option value="tech" <?= $data['category']=='tech'?'selected':'' ?>>Tech</option>
+<option value="academic" <?= $data['category']=='academic'?'selected':'' ?>>Academic</option>
+<option value="creative" <?= $data['category']=='creative'?'selected':'' ?>>Creative</option>
+<option value="business" <?= $data['category']=='business'?'selected':'' ?>>Business</option>
+<option value="sports" <?= $data['category']=='sports'?'selected':'' ?>>Sports</option>
+<option value="entertainment" <?= $data['category']=='entertainment'?'selected':'' ?>>Entertainment</option>
+<option value="others" <?= $data['category']=='others'?'selected':'' ?>>Others</option>
 </select>
 
 <label>Description</label>
-<textarea name="description" <?= $can_edit ? '' : 'disabled' ?>>
-<?= htmlspecialchars($data['description']) ?>
-</textarea>
+<textarea name="description" <?= $can_edit_page ? '' : 'disabled' ?>><?= htmlspecialchars($data['description']) ?></textarea>
 
 <label>Participants Limit</label>
 <input type="number" name="participants"
-    value="<?= $data['participants'] ?>"
-    <?= $can_edit ? '' : 'disabled' ?>>
+value="<?= $data['participants'] ?>"
+<?= $can_edit_page ? '' : 'disabled' ?>>
 
 <h3>Application Period</h3>
 
 <label>Application Start</label>
-<input type="date" id="app_start" name="application_start"
-    value="<?= $data['application_start'] ?>"
-    min="<?= $today ?>"
-    <?= $can_edit ? '' : 'disabled' ?>>
+<input type="date" name="application_start"
+value="<?= $data['application_start'] ?>"
+min="<?= $today ?>"
+<?= $can_edit_application ? '' : 'disabled' ?>>
 
 <label>Application End</label>
-<input type="date" id="app_end" name="application_end"
-    value="<?= $data['application_end'] ?>"
-    min="<?= $today ?>"
-    <?= $can_edit ? '' : 'disabled' ?>>
+<input type="date" name="application_end"
+value="<?= $data['application_end'] ?>"
+min="<?= $today ?>"
+<?= $can_edit_application ? '' : 'disabled' ?>>
 
 <h3>Competition Period</h3>
 
 <label>Start Date</label>
-<input type="date" id="start_date" name="start_date"
-    value="<?= $data['start_date'] ?>"
-    min="<?= $today ?>"
-    <?= $can_edit ? '' : 'disabled' ?>>
+<input type="date" name="start_date"
+value="<?= $data['start_date'] ?>"
+min="<?= $today ?>"
+<?= $can_edit_competition ? '' : 'disabled' ?>>
 
 <label>End Date</label>
-<input type="date" id="end_date" name="end_date"
-    value="<?= $data['end_date'] ?>"
-    min="<?= $today ?>"
-    <?= $can_edit ? '' : 'disabled' ?>>
+<input type="date" name="end_date"
+value="<?= $data['end_date'] ?>"
+min="<?= $today ?>"
+<?= $can_edit_competition ? '' : 'disabled' ?>>
 
 <h3>Prizes</h3>
 
 <label>1st Prize</label>
 <input type="text" name="prize_1st"
-    value="<?= htmlspecialchars($data['prize_1st']) ?>"
-    <?= $can_edit ? '' : 'disabled' ?>>
+value="<?= htmlspecialchars($data['prize_1st']) ?>"
+<?= $can_edit_page ? '' : 'disabled' ?>>
 
 <label>2nd Prize</label>
 <input type="text" name="prize_2nd"
-    value="<?= htmlspecialchars($data['prize_2nd']) ?>"
-    <?= $can_edit ? '' : 'disabled' ?>>
+value="<?= htmlspecialchars($data['prize_2nd']) ?>"
+<?= $can_edit_page ? '' : 'disabled' ?>>
 
 <label>3rd Prize</label>
 <input type="text" name="prize_3rd"
-    value="<?= htmlspecialchars($data['prize_3rd']) ?>"
-    <?= $can_edit ? '' : 'disabled' ?>>
+value="<?= htmlspecialchars($data['prize_3rd']) ?>"
+<?= $can_edit_page ? '' : 'disabled' ?>>
 
 <label>Prize Description</label>
 <textarea name="prize_description"
-    <?= $can_edit ? '' : 'disabled' ?>>
-<?= htmlspecialchars($data['prize_description']) ?>
-</textarea>
+<?= $can_edit_page ? '' : 'disabled' ?>><?= htmlspecialchars($data['prize_description']) ?></textarea>
 
-<?php if ($can_edit): ?>
-    <button type="submit">Update Competition</button>
+<?php if ($can_edit_page): ?>
+<button type="submit">Update Competition</button>
 <?php endif; ?>
 
 </form>
@@ -208,7 +202,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $can_edit) {
 const today = new Date().toISOString().split('T')[0];
 
 document.querySelectorAll('input[type="date"]').forEach(input => {
-    input.min = today;
+input.min = today;
 });
 </script>
 

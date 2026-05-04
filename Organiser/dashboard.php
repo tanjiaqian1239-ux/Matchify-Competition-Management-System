@@ -35,14 +35,12 @@ if ($user_query && $user_query->num_rows > 0) {
    DASHBOARD DATA
 ========================= */
 
-/* Total Competition */
 $total = $conn->query("
     SELECT COUNT(*) AS total
     FROM competition_applications
     WHERE organizer_id = $user_id
 ")->fetch_assoc()['total'];
 
-/* Approved */
 $approved = $conn->query("
     SELECT COUNT(*) AS total
     FROM competition_applications
@@ -50,7 +48,6 @@ $approved = $conn->query("
     AND status = 'approved'
 ")->fetch_assoc()['total'];
 
-/* Pending */
 $pending = $conn->query("
     SELECT COUNT(*) AS total
     FROM competition_applications
@@ -58,7 +55,6 @@ $pending = $conn->query("
     AND status = 'pending'
 ")->fetch_assoc()['total'];
 
-/* Rejected */
 $rejected = $conn->query("
     SELECT COUNT(*) AS total
     FROM competition_applications
@@ -66,7 +62,6 @@ $rejected = $conn->query("
     AND status = 'rejected'
 ")->fetch_assoc()['total'];
 
-/* Participants */
 $participants = $conn->query("
     SELECT COUNT(*) AS total
     FROM competition_participants cp
@@ -75,7 +70,9 @@ $participants = $conn->query("
     WHERE ca.organizer_id = $user_id
 ")->fetch_assoc()['total'];
 
-/* Competition List */
+/* =========================
+   COMPETITION LIST
+========================= */
 $list = $conn->query("
     SELECT *
     FROM competition_applications
@@ -95,8 +92,8 @@ $list = $conn->query("
 
 <link rel="stylesheet" href="../Organiser-css/dashboard.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 </head>
+
 <body>
 
 <div class="sidebar">
@@ -268,11 +265,8 @@ $list = $conn->query("
 
                         <td><?php echo $row['participants']; ?></td>
 
-                        <!-- ✅ APPLICATION DATE ADDED -->
                         <td>
-                            <?php 
-                                echo $row['application_start'] . " ~ " . $row['application_end']; 
-                            ?>
+                            <?php echo $row['application_start'] . " ~ " . $row['application_end']; ?>
                         </td>
 
                         <td><?php echo $row['start_date']; ?></td>
@@ -280,6 +274,7 @@ $list = $conn->query("
                         <td><?php echo $row['end_date']; ?></td>
 
                         <td>
+
                             <a href="view-competition-detail.php?id=<?php echo $row['id']; ?>">
                                 <i class="fa fa-eye action-icon"></i>
                             </a>
@@ -288,10 +283,16 @@ $list = $conn->query("
                                 <i class="fa fa-edit action-icon"></i>
                             </a>
 
+                            <!-- FIXED -->
+                            <a href="view-participants.php?id=<?php echo $row['id']; ?>">
+                                <i class="fa fa-users action-icon"></i>
+                            </a>
+
                             <a href="delete-competition.php?id=<?php echo $row['id']; ?>"
                                onclick="return confirm('Delete this competition?')">
                                 <i class="fa fa-trash action-icon"></i>
                             </a>
+
                         </td>
 
                     </tr>

@@ -238,6 +238,7 @@ $list = $conn->query("
                         <th>Category</th>
                         <th>Start</th>
                         <th>End</th>
+                        <th>Participants</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -245,6 +246,16 @@ $list = $conn->query("
                 <tbody>
 
                 <?php while($row = $list->fetch_assoc()): ?>
+
+                    <?php
+                        $cid = $row['id'];
+
+                        $pcount = $conn->query("
+                            SELECT COUNT(*) AS total 
+                            FROM competition_participants 
+                            WHERE competition_id = $cid
+                        ")->fetch_assoc()['total'];
+                    ?>
 
                     <tr>
 
@@ -262,6 +273,8 @@ $list = $conn->query("
 
                         <td><?php echo $row['end_date']; ?></td>
 
+                        <td><?php echo $pcount; ?></td>
+
                         <td>
                             <a href="competition_detail.php?id=<?php echo $row['id']; ?>">
                                 <i class="fa fa-eye action-icon"></i>
@@ -269,6 +282,10 @@ $list = $conn->query("
 
                             <a href="edit_competition.php?id=<?php echo $row['id']; ?>">
                                 <i class="fa fa-edit action-icon"></i>
+                            </a>
+
+                            <a href="view_participants.php?id=<?php echo $row['id']; ?>">
+                                <i class="fa fa-users action-icon"></i>
                             </a>
                         </td>
 
