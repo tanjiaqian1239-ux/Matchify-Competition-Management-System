@@ -31,6 +31,7 @@ if (isset($_SESSION['user_id'])) {
 <meta charset="UTF-8">
 <title>Apply Competition</title>
 <link rel="icon" type="image/png" href="../images/logo.png">
+
 <link rel="stylesheet" href="../css/style.css">
 <link rel="stylesheet" href="../Organiser-css/apply-competition.css">
 </head>
@@ -39,6 +40,7 @@ if (isset($_SESSION['user_id'])) {
 
 <div class="hero">
 
+<!-- NAV -->
 <nav class="main-nav">
 
     <img src="../images/logo.png" class="logo">
@@ -69,6 +71,7 @@ if (isset($_SESSION['user_id'])) {
 
 </nav>
 
+<!-- FORM -->
 <div class="form-wrapper">
 
 <h1>Apply Online Competition</h1>
@@ -89,7 +92,7 @@ if (isset($_SESSION['user_id'])) {
         <option value="business">📊 Business & Innovation</option>
         <option value="sports">🏃 Sports & Physical</option>
         <option value="entertainment">🎤 Entertainment</option>
-        <option value="others">🌍 General / Others</option>
+        <option value="others">🌍 Others</option>
     </select>
 
     <textarea name="description" placeholder="Competition Description" rows="4" required></textarea>
@@ -98,52 +101,53 @@ if (isset($_SESSION['user_id'])) {
 
     <!-- APPLICATION PERIOD -->
     <div class="section-label">📅 Application Period</div>
+
     <div class="date-row">
-        <div class="date-group">
-            <span>Application Start</span>
-            <input type="date" name="application_start" min="<?= $today ?>" required>
-        </div>
-        <div class="date-group">
-            <span>Application End</span>
-            <input type="date" name="application_end" min="<?= $today ?>" required>
-        </div>
+        <input type="date" name="application_start" min="<?= $today ?>" required>
+        <input type="date" name="application_end" min="<?= $today ?>" required>
     </div>
 
     <!-- COMPETITION PERIOD -->
     <div class="section-label">🏆 Competition Period</div>
+
     <div class="date-row">
-        <div class="date-group">
-            <span>Competition Start</span>
-            <input type="date" name="start_date" min="<?= $today ?>" required>
-        </div>
-        <div class="date-group">
-            <span>Competition End</span>
-            <input type="date" name="end_date" min="<?= $today ?>" required>
-        </div>
+        <input type="date" name="start_date" min="<?= $today ?>" required>
+        <input type="date" name="end_date" min="<?= $today ?>" required>
     </div>
 
     <!-- PRIZES -->
     <div class="section-label">🎁 Prizes</div>
 
-    <div class="prize-row">
-        <span>🥇 1st Place</span>
-        <input type="text" name="prize_1st" placeholder="e.g. RM 500 + Certificate" required>
-    </div>
+    <input type="text" name="prize_1st" placeholder="🥇 1st Prize" required>
+    <input type="text" name="prize_2nd" placeholder="🥈 2nd Prize" required>
+    <input type="text" name="prize_3rd" placeholder="🥉 3rd Prize" required>
 
-    <div class="prize-row">
-        <span>🥈 2nd Place</span>
-        <input type="text" name="prize_2nd" placeholder="e.g. RM 300 + Certificate" required>
-    </div>
+    <textarea name="prize_description" placeholder="Prize Details" rows="3" required></textarea>
 
-    <div class="prize-row">
-        <span>🥉 3rd Place</span>
-        <input type="text" name="prize_3rd" placeholder="e.g. RM 100 + Certificate" required>
-    </div>
+    <!-- RULES -->
+    <div class="section-label">📜 Competition Rules</div>
 
-    <textarea name="prize_description" placeholder="Prize Details (e.g. Cash prizes will be transferred within 30 days after competition ends)" rows="3" required></textarea>
+    <textarea name="rules" placeholder="
+Example:
+- No plagiarism allowed
+- Must submit original work
+- File format: PDF / ZIP / Link
+- Late submission will be disqualified
+    " rows="5" required></textarea>
+
+    <!-- SUBMISSION SETTINGS -->
+    <div class="section-label">📤 Submission Settings</div>
+
+    <select name="submission_type" required>
+        <option value="">-- Select Submission Type --</option>
+        <option value="file">File Upload</option>
+        <option value="link">Link (Google Drive / GitHub)</option>
+        <option value="both">Both</option>
+    </select>
 
     <!-- IMAGE -->
     <div class="section-label">🖼️ Competition Image</div>
+
     <input type="file" name="competition_image" accept="image/*" required>
 
     <input type="hidden" name="status" value="pending">
@@ -161,18 +165,6 @@ function toggleMenu(){
     const menu = document.getElementById("dropdownMenu");
     menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
 }
-
-document.querySelector('[name="application_start"]').addEventListener('change', function() {
-    document.querySelector('[name="application_end"]').min = this.value;
-});
-
-document.querySelector('[name="application_end"]').addEventListener('change', function() {
-    document.querySelector('[name="start_date"]').min = this.value;
-});
-
-document.querySelector('[name="start_date"]').addEventListener('change', function() {
-    document.querySelector('[name="end_date"]').min = this.value;
-});
 </script>
 
 </body>

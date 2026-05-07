@@ -59,6 +59,7 @@ if (isset($_SESSION['user_id'])) {
 
                 <div class="dropdown-menu" id="dropdownMenu">
                     <a href="profile.php">My Profile</a>
+                    <a href="my-competition.php">My Competition</a>
                     <a href="../login.php">Logout</a>
                 </div>
             </div>

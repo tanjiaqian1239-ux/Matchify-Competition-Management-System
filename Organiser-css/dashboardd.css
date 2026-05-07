@@ -1,0 +1,443 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+*{
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    box-shadow: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body{
+    display:flex;
+}
+
+.sidebar{
+    position: sticky;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 70px;
+    height: 100vh;
+    padding: 0 1.7rem;
+    color: #fff;
+    overflow: hidden;
+    transition: all 0.5s linear;
+    background: rgba(113, 99, 186, 155);
+}
+
+.sidebar:hover{
+    width:240px;   
+    transition: 0.5s;
+}
+
+.logo{
+    height: 80px;
+    padding: 16px;
+}
+
+.menu{
+    height: 88%;
+    position: relative;
+    list-style: none;
+    padding: 0;
+}
+
+.menu li{
+    padding: 1rem;
+    margin: 8px 0;
+    border-radius:8px;
+    transition: all 0.5s ease-in-out;
+}
+
+.menu li:hover, .active{
+    background: #e0e0e058;
+
+}
+
+.menu a{
+    color: #fff;
+    font-size: 14px;
+    text-decoration: none;
+    display:flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.menu a span{
+    overflow: hidden;
+}
+
+.menu a i{
+    font-size: 1.2rem;
+}
+
+.logout{
+    position: absolute;
+    bottom: 40px;
+    left: 0;
+    width: 60%;
+}
+
+.main--content{
+    position: relative;
+    background: #ebe9e9;
+    width: 100%;
+    padding: 1rem;
+}
+
+.header--wrapper img{
+    width: 50px;
+    height: 50px;
+    cursor: pointer;  
+    border-radius: 50%;
+}
+
+.header--wrapper{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    background: #fff;
+    border-radius: 10px;
+    padding: 10px 2rem;
+    margin-bottom: 1rem;
+}
+
+.header--title{
+    color: rgba(113, 90, 186, 255);
+}
+
+.user--info{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.search--box{
+    background: rgb(237, 237, 237);
+    border-radius: 15px;
+    color: rgba(113, 99, 186, 255);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+}
+
+.search--box input{
+    background: transparent;
+    padding: 10px;
+}
+
+.search--box i{
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.5s ease-out;
+}
+
+.search--box i:hover{
+    transform: scale(1.2);
+}
+
+/*card*/
+
+.card--container{
+    background: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+      margin-bottom: 1.5rem;
+}
+
+.card--wrapper{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.main--title{
+    color: rgba(113, 99, 186, 255);
+    padding-bottom: 10px;
+    font-size: 15px;
+}
+
+.competition--card{
+    background: rgba(229, 223, 223);
+    border-radius: 10px;
+    padding: 1.2rem;
+    width: 270px;
+    height: 95x;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;;
+    transition: all 0.5s ease-in-out;
+}
+
+.competition--card:hover{
+    transform: translateY(-5px);
+}
+
+.card--header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.amount{
+    display: flex;
+    flex-direction: column;
+}
+
+.title{
+    font-size: 13px;
+    font-weight: 200;
+}
+
+.amount--value{
+    font-size: 20px;
+    font-family: "Courier New", Courier, monospace;
+    font-weight: 600;
+}
+
+.icon{
+    color: #fff;
+    padding: 1rem;
+    height: 30px;
+    width: 45px;
+    text-align: center;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    background: red;
+}
+
+.light-red{
+    background: rgba(251, 233, 233);
+}
+
+.light-purple{
+    background: rgba(235, 254, 235);
+}
+.light-green{
+    background: rgba(235, 254,235);
+}
+
+.light-blue{
+    background: rgba(236, 236, 254);
+}
+
+.dark-red{
+    background: red;
+}
+
+.dark-purple{
+    background: purple;
+}
+
+.dark-green{
+    background: green;
+}
+.dark-blue{
+    background: blue;
+}
+
+
+/* TABLE */
+
+.table--container{
+    background: #fff;
+    margin-top: 1rem;
+    padding: 2rem;
+    border-radius: 10px;
+}
+
+table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead{
+    background: #f4f4f4;
+}
+
+th, td{
+    padding: 12px;
+    text-align: left;
+    font-size: 14px;
+}
+
+tbody tr{
+    border-bottom: 1px solid #eee;
+}
+
+tbody tr:hover{
+    background: #f9f9f9;
+}
+
+/* STATUS COLORS */
+
+.status{
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.published{
+    background: #d4f5e9;
+    color: green;
+}
+
+.approved{
+    background: #e0e7ff;
+    color: blue;
+}
+
+.pending{
+    background: #fff4cc;
+    color: orange;
+}
+
+.rejected{
+    background: #ffe0e0;
+    color: red;
+}
+
+/* ICON */
+
+.action-icon{
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.action-icon:hover{
+    transform: scale(1.2);
+}
+
+/* TABS */
+.tab--container{
+    display: flex;
+    background: #e9e9e9;
+    border-radius: 20px;
+    padding: 5px;
+    margin-bottom: 1.5rem;
+    justify-content: space-between;
+}
+
+.tab{
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    position: relative;
+}
+
+.tab.active{
+    background: #fff;
+    font-weight: 600;
+}
+
+.tab-badge{
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.orange{
+    background: orange;
+    color: #fff;
+}
+
+.purple{
+    background: purple;
+    color: #fff;
+}
+
+/* SECTION HEADER */
+.section--header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.pending-label{
+    background: #e0e7ff;
+    color: blue;
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+}
+
+/* PROPOSAL CARD */
+.proposal--card{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.proposal--left h4{
+    margin-bottom: 5px;
+}
+
+.tag{
+    background: #eee;
+    padding: 3px 8px;
+    border-radius: 8px;
+    font-size: 12px;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.organizer{
+    font-weight: 600;
+}
+
+.email{
+    font-size: 13px;
+    color: gray;
+    margin-bottom: 10px;
+}
+
+.meta{
+    display: flex;
+    gap: 20px;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.desc{
+    font-size: 13px;
+    color: #555;
+}
+
+/* RIGHT BUTTONS */
+.proposal--right{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.approve{
+    background: green;
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.reject{
+    background: #fff;
+    border: 2px solid red;
+    color: red;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+}

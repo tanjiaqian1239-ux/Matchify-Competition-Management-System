@@ -206,6 +206,21 @@ form button:hover{
     opacity: 0.95;
 }
 
+.section-label{
+    font-weight: 600;
+    margin-top: 10px;
+    color: #333;
+}
+
+.date-row{
+    display: flex;
+    gap: 10px;
+}
+
+.date-row input{
+    flex: 1;
+}
+
 /* ================= RESPONSIVE ================= */
 @media (max-width: 768px){
 
@@ -222,3 +237,4 @@ form button:hover{
         margin: 8px 10px;
     }
 }
+

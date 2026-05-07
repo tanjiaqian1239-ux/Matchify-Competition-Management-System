@@ -138,6 +138,7 @@ if (isset($_SESSION['user_id'])) {
                 <img src="<?php echo $profile_image; ?>" class="profile-icon" onclick="toggleMenu()">
                 <div class="dropdown-menu" id="dropdownMenu">
                     <a href="profile.php">My Profile</a>
+                    <a href="my-competition.php">My Competition</a>
                     <a href="../login.php">Logout</a>
                 </div>
             </div>

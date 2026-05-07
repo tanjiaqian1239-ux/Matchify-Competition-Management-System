@@ -1,0 +1,179 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+.assign-wrapper {
+    max-width: 900px;
+}
+
+/* BACK BUTTON */
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #7163ba;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    transition: opacity 0.2s;
+}
+
+.btn-back:hover { opacity: 0.7; }
+
+/* COMPETITION INFO */
+.comp-info {
+    background: linear-gradient(135deg, #7163ba, #a855f7);
+    color: #fff;
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+}
+
+.comp-info h2 {
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.comp-info p {
+    font-size: 13px;
+    opacity: 0.85;
+}
+
+/* MESSAGE BOX */
+.msg-box {
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.msg-success { background: #d1fae5; color: #065f46; }
+.msg-already { background: #fef3c7; color: #92400e; }
+.msg-removed { background: #fee2e2; color: #b91c1c; }
+
+/* SECTION TITLE */
+.section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #7163ba;
+    margin-bottom: 16px;
+}
+
+/* FORM GRID */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
+}
+
+.required { color: red; }
+
+.form-group input {
+    padding: 10px 14px;
+    border: 1.5px solid #ddd;
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+    font-family: 'Poppins', sans-serif;
+    transition: border 0.2s;
+}
+
+.form-group input:focus {
+    border-color: #7163ba;
+}
+
+/* SUBMIT BUTTON */
+.btn-assign {
+    padding: 12px 28px;
+    background: linear-gradient(135deg, #7163ba, #a855f7);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    font-family: 'Poppins', sans-serif;
+}
+
+.btn-assign:hover { opacity: 0.85; }
+
+/* TABLE */
+.judge-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.judge-table th {
+    background: #f4f4f4;
+    padding: 12px;
+    text-align: left;
+    font-size: 12px;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.judge-table td {
+    padding: 12px;
+    font-size: 13px;
+    border-bottom: 1px solid #eee;
+    color: #333;
+}
+
+.judge-table tr:hover td { background: #fafafa; }
+
+/* STATUS BADGE */
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.status-badge.pending  { background: #fef3c7; color: #b45309; }
+.status-badge.approved { background: #d1fae5; color: #065f46; }
+.status-badge.rejected { background: #fee2e2; color: #b91c1c; }
+
+/* REMOVE BUTTON */
+.btn-remove {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+    display: inline-block;
+}
+
+.btn-remove:hover { background: #fca5a5; }
+
+/* EMPTY */
+.empty-msg {
+    text-align: center;
+    color: #aaa;
+    padding: 30px;
+    font-size: 14px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+    .form-grid { grid-template-columns: 1fr; }
+}

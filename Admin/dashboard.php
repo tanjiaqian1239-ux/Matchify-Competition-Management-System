@@ -25,15 +25,15 @@
                 </a>
             </li>
             <li>
-                <a href="../Admin/manage-competition-list.php">
-                    <i class="fas fa-tachometer-alt"></i>
-                    <span>Manage Competition List</span>
+                <a href="manage-competition-list.php">
+                    <i class="fas fa-list-check"></i>
+                    <span>Manage Competition</span>
                 </a>
             </li>
             <li>
-                <a href="#">
-                    <i class="fas fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
+                <a href="manage-judges.php">
+                    <i class="fas fa-gavel"></i>
+                    <span>Manage Judges</span>
                 </a>
             </li>
             <li>
