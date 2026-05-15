@@ -12,7 +12,7 @@ if (isset($_SESSION['user_id'])) {
     if ($user_query && $user_query->num_rows > 0) {
         $user = $user_query->fetch_assoc();
 
-        if (!empty($user['profile_image'])) {
+        if (!empty($user['profile_image']) && $user['profile_image'] !== 'default.png') {
             $path = "/images/profile/" . $user['profile_image'];
 
             if (file_exists($_SERVER['DOCUMENT_ROOT'] . $path)) {

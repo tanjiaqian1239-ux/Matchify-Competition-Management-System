@@ -116,7 +116,8 @@ $stmt->bind_param(
    EXECUTE
 ========================= */
 if ($stmt->execute()) {
-    header("Location: application-success.php");
+    $new_id = $conn->insert_id;
+    header("Location: application-success.php?id=" . $new_id);
     exit;
 } else {
     echo "❌ Database error: " . $stmt->error;

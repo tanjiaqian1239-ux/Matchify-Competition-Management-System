@@ -38,57 +38,75 @@ if ($user_query && $user_query->num_rows > 0) {
 $user_data = $conn->query("SELECT * FROM users WHERE id=$user_id")->fetch_assoc();
 
 /* =========================
+   ERROR HOLDER
+========================= */
+$error_msg = "";
+$old = [
+    'full_name' => $user_data['fullname'],
+    'id_type'   => '',
+    'id_number' => '',
+    'gender'    => '',
+    'email'     => $user_data['email'],
+    'phone'     => $user_data['phone'],
+    'address'   => '',
+];
+
+/* =========================
    SUBMIT APPLICATION
 ========================= */
 if (isset($_POST['apply'])) {
 
     $full_name = $_POST['full_name'];
-    $id_type = $_POST['id_type'];
+    $id_type   = $_POST['id_type'];
     $id_number = $_POST['id_number'];
-    $gender = $_POST['gender'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
-    $address = $_POST['address'];
+    $gender    = $_POST['gender'];
+    $email     = $_POST['email'];
+    $phone     = $_POST['phone'];
+    $address   = $_POST['address'];
+
+    // Keep old values so form stays filled
+    $old = compact('full_name','id_type','id_number','gender','email','phone','address');
 
     /* =========================
-       BASIC VALIDATION
+       VALIDATION
     ========================= */
     if ($id_type == "IC") {
         if (!preg_match("/^[0-9]{6}-[0-9]{2}-[0-9]{4}$/", $id_number)) {
-            echo "<script>alert('IC format must be 000000-00-0000');</script>";
-            exit();
+            $error_msg = "IC format must be: 000000-00-0000 (e.g. 990101-14-1234)";
         }
     }
 
     if ($id_type == "Passport") {
         if (!preg_match("/^[A-Z0-9]{6,9}$/", $id_number)) {
-            echo "<script>alert('Passport format invalid (6-9 alphanumeric characters)');</script>";
-            exit();
+            $error_msg = "Passport format invalid. Use 6–9 uppercase letters/numbers (e.g. A12345678)";
         }
     }
 
-    /* =========================
-       CHECK DUPLICATE
-    ========================= */
-    $check = $conn->query("
-        SELECT * FROM competition_participants 
-        WHERE user_id=$user_id AND competition_id=$competition_id
-    ");
+    if ($error_msg == "") {
 
-    if ($check->num_rows == 0) {
+        /* =========================
+           CHECK DUPLICATE
+        ========================= */
+        $check = $conn->query("
+            SELECT * FROM competition_participants 
+            WHERE user_id=$user_id AND competition_id=$competition_id
+        ");
 
-        $sql = "INSERT INTO competition_participants
-        (competition_id, user_id, full_name, ic_number, gender, email, phone, address, status)
-        VALUES
-        ('$competition_id', '$user_id', '$full_name', '$id_type: $id_number', '$gender', '$email', '$phone', '$address', 'pending')";
+        if ($check->num_rows == 0) {
 
-        if ($conn->query($sql)) {
-            header("Location: ../Participant/my-applications.php");
-            exit();
+            $sql = "INSERT INTO competition_participants
+            (competition_id, user_id, full_name, ic_number, gender, email, phone, address, status)
+            VALUES
+            ('$competition_id', '$user_id', '$full_name', '$id_type: $id_number', '$gender', '$email', '$phone', '$address', 'pending')";
+
+            if ($conn->query($sql)) {
+                header("Location: ../Participant/my-applications.php");
+                exit();
+            }
+
+        } else {
+            $error_msg = "You have already applied for this competition.";
         }
-
-    } else {
-        echo "<script>alert('You already applied this competition');</script>";
     }
 }
 ?>
@@ -148,6 +166,27 @@ button{
     background: linear-gradient(135deg,#c430d7,#7b2ff7);
     color: #fff;
     font-weight: 600;
+    cursor: pointer;
+}
+
+/* ===== ERROR BOX ===== */
+.error-box{
+    background: #fff0f4;
+    border: 1px solid #df4881;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 15px;
+    color: #c0184e;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Highlight the id_number field when error */
+input.input-error{
+    border-color: #df4881 !important;
+    box-shadow: 0 0 8px rgba(223,72,129,0.25);
 }
 </style>
 
@@ -195,51 +234,59 @@ button{
 
 <h2>Apply Competition</h2>
 
+<!-- ERROR MESSAGE -->
+<?php if ($error_msg != ""): ?>
+<div class="error-box">
+    &#10060; <?= htmlspecialchars($error_msg) ?>
+</div>
+<?php endif; ?>
+
 <form method="POST">
 
     <input type="text" name="full_name"
-           value="<?= htmlspecialchars($user_data['fullname']) ?>"
+           value="<?= htmlspecialchars($old['full_name']) ?>"
            required placeholder="Full Name">
 
     <!-- ID TYPE -->
     <select name="id_type" required>
         <option value="">Select ID Type</option>
-        <option value="IC">IC (Malaysia)</option>
-        <option value="Passport">Passport</option>
-        <option value="Student ID">Student ID</option>
+        <option value="IC"        <?= $old['id_type']=='IC'        ? 'selected':'' ?>>IC (Malaysia)</option>
+        <option value="Passport"  <?= $old['id_type']=='Passport'  ? 'selected':'' ?>>Passport</option>
+        <option value="Student ID"<?= $old['id_type']=='Student ID' ? 'selected':'' ?>>Student ID</option>
     </select>
 
     <div class="hint">
         IC format: 000000-00-0000<br>
-        Passport format: 6–9 letters/numbers
+        Passport format: 6–9 letters/numbers (uppercase)
     </div>
 
-    <input type="text" name="id_number" required placeholder="Enter ID Number">
+    <input type="text" name="id_number"
+           value="<?= htmlspecialchars($old['id_number']) ?>"
+           required placeholder="Enter ID Number"
+           class="<?= $error_msg != '' ? 'input-error' : '' ?>">
 
     <select name="gender" required>
         <option value="">Gender</option>
-        <option>Male</option>
-        <option>Female</option>
+        <option <?= $old['gender']=='Male'   ? 'selected':'' ?>>Male</option>
+        <option <?= $old['gender']=='Female' ? 'selected':'' ?>>Female</option>
     </select>
 
     <input type="email" name="email"
-           value="<?= htmlspecialchars($user_data['email']) ?>"
+           value="<?= htmlspecialchars($old['email']) ?>"
            required placeholder="Email">
 
     <input type="text" name="phone"
-           value="<?= htmlspecialchars($user_data['phone']) ?>"
+           value="<?= htmlspecialchars($old['phone']) ?>"
            required placeholder="Phone">
 
-    <textarea name="address" required placeholder="Address"></textarea>
+    <textarea name="address" required placeholder="Address"><?= htmlspecialchars($old['address']) ?></textarea>
 
     <button type="submit" name="apply">Submit Application</button>
 
 </form>
 
 </div>
-
 </div>
-
 </div>
 
 <script>

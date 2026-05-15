@@ -1,0 +1,428 @@
+/* =========================
+   GLOBAL
+========================= */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    background: #f0f2f8;
+    color: #111827;
+    min-height: 100vh;
+}
+
+/* =========================
+   CONTAINER
+========================= */
+.container {
+    width: 90%;
+    max-width: 1000px;
+    margin: 45px auto;
+    padding-bottom: 60px;
+}
+
+/* =========================
+   HEADER
+========================= */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 28px;
+}
+
+.header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.page-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: #6d5dfc;
+}
+
+.header h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.back-btn {
+    text-decoration: none;
+    padding: 10px 20px;
+    background: #fff;
+    color: #374151;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid #e5e7eb;
+    transition: 0.25s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.back-btn:hover {
+    background: #6d5dfc;
+    color: #fff;
+    border-color: #6d5dfc;
+    transform: translateY(-2px);
+}
+
+/* =========================
+   FLASH MESSAGE
+========================= */
+.flash {
+    padding: 13px 18px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 22px;
+}
+
+.flash-success {
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+
+.flash-error {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+/* =========================
+   FILTER TABS
+========================= */
+.filter-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.tab {
+    text-decoration: none;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 500;
+    background: #fff;
+    color: #6b7280;
+    border: 1px solid #e5e7eb;
+    transition: 0.2s;
+}
+
+.tab:hover {
+    background: #ede9fe;
+    color: #6d5dfc;
+    border-color: #c4b5fd;
+}
+
+.tab.active {
+    background: linear-gradient(135deg, #6d5dfc, #8a7dff);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 14px rgba(109,93,252,0.35);
+}
+
+/* =========================
+   CARD CONTAINER
+========================= */
+.card-container {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* =========================
+   CARD
+========================= */
+.card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    padding: 20px 24px;
+    border-radius: 18px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+    border: 1px solid #f0f0f0;
+    transition: 0.25s;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 35px rgba(0,0,0,0.10);
+}
+
+/* =========================
+   LEFT SIDE
+========================= */
+.left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6d5dfc, #8a7dff);
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.info h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 3px;
+}
+
+.info .email {
+    color: #6b7280;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+/* =========================
+   STATUS BADGE
+========================= */
+.status {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+
+.status.pending  { background: #fef9c3; color: #a16207; }
+.status.approved { background: #dcfce7; color: #15803d; }
+.status.rejected { background: #fee2e2; color: #b91c1c; }
+
+.reason {
+    margin-top: 7px;
+    font-size: 12px;
+    color: #9ca3af;
+    font-style: italic;
+}
+
+/* =========================
+   RIGHT SIDE BUTTONS
+========================= */
+.right {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.approve {
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: 0.25s;
+    box-shadow: 0 4px 14px rgba(34,197,94,0.25);
+}
+
+.approve:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(34,197,94,0.35);
+}
+
+.reject {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: 0.25s;
+    box-shadow: 0 4px 14px rgba(239,68,68,0.25);
+    font-family: "Poppins", sans-serif;
+}
+
+.reject:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(239,68,68,0.35);
+}
+
+/* =========================
+   EMPTY STATE
+========================= */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #9ca3af;
+    font-size: 15px;
+    background: #fff;
+    border-radius: 18px;
+    border: 2px dashed #e5e7eb;
+}
+
+/* =========================
+   OVERLAY
+========================= */
+#overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.50);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+}
+
+/* =========================
+   POPUP
+========================= */
+#popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 28px;
+    border-radius: 20px;
+    width: 380px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.20);
+    z-index: 200;
+}
+
+@keyframes pop {
+    from { transform: translate(-50%, -48%) scale(0.95); opacity: 0; }
+    to   { transform: translate(-50%, -50%) scale(1);    opacity: 1; }
+}
+
+#popup h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: #111827;
+}
+
+.popup-sub {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 16px;
+}
+
+#popup textarea {
+    width: 100%;
+    height: 110px;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    font-size: 14px;
+    font-family: "Poppins", sans-serif;
+    outline: none;
+    resize: none;
+    transition: 0.2s;
+}
+
+#popup textarea:focus {
+    border-color: #6d5dfc;
+    box-shadow: 0 0 0 3px rgba(109,93,252,0.15);
+}
+
+/* =========================
+   POPUP BUTTONS
+========================= */
+.popup-btn {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.popup-btn button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-family: "Poppins", sans-serif;
+}
+
+.popup-btn button:first-child {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.popup-btn button:first-child:hover {
+    background: #e5e7eb;
+}
+
+.popup-btn button:last-child {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(239,68,68,0.30);
+}
+
+.popup-btn button:last-child:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(239,68,68,0.40);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 600px) {
+
+    .card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .right {
+        width: 100%;
+    }
+
+    .approve, .reject {
+        flex: 1;
+        justify-content: center;
+    }
+
+    #popup {
+        width: 90%;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+    }
+}

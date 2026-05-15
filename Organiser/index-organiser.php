@@ -13,7 +13,7 @@ if (isset($_SESSION['user_id'])) {
         $user = $user_query->fetch_assoc();
 
         if (!empty($user['profile_image'])) {
-            $path = "/images/pr     ofile/" . $user['profile_image'];
+            $path = "/images/profile/" . $user['profile_image'];
 
             if (file_exists($_SERVER['DOCUMENT_ROOT'] . $path)) {
                 $profile_image = $path;
@@ -56,6 +56,7 @@ if (isset($_SESSION['user_id'])) {
                 <img src="<?php echo $profile_image; ?>" class="profile-icon" onclick="toggleMenu()">
                 <div class="dropdown-menu" id="dropdownMenu">
                     <a href="profile.php">My Profile</a>
+                    <a href="dashboard.php">My Dashboard</a>
                     <a href="../login.php">Logout</a>
                 </div>
             </div>

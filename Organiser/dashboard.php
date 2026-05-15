@@ -9,6 +9,10 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = (int) $_SESSION['user_id'];
 
+// Get user info
+$user_info = $conn->query("SELECT fullname, email FROM users WHERE id = $user_id")->fetch_assoc();
+
+// Profile image
 $profile_image = "../images/profile.avif";
 $user_query = $conn->query("SELECT profile_image FROM users WHERE id = $user_id");
 if ($user_query && $user_query->num_rows > 0) {
@@ -21,10 +25,10 @@ if ($user_query && $user_query->num_rows > 0) {
     }
 }
 
-$total = $conn->query("SELECT COUNT(*) AS total FROM competition_applications WHERE organizer_id = $user_id")->fetch_assoc()['total'];
-$approved = $conn->query("SELECT COUNT(*) AS total FROM competition_applications WHERE organizer_id = $user_id AND status = 'approved'")->fetch_assoc()['total'];
-$pending = $conn->query("SELECT COUNT(*) AS total FROM competition_applications WHERE organizer_id = $user_id AND status = 'pending'")->fetch_assoc()['total'];
-$rejected = $conn->query("SELECT COUNT(*) AS total FROM competition_applications WHERE organizer_id = $user_id AND status = 'rejected'")->fetch_assoc()['total'];
+$total        = $conn->query("SELECT COUNT(*) AS total FROM competition_applications WHERE organizer_id = $user_id")->fetch_assoc()['total'];
+$approved     = $conn->query("SELECT COUNT(*) AS total FROM competition_applications WHERE organizer_id = $user_id AND status = 'approved'")->fetch_assoc()['total'];
+$pending      = $conn->query("SELECT COUNT(*) AS total FROM competition_applications WHERE organizer_id = $user_id AND status = 'pending'")->fetch_assoc()['total'];
+$rejected     = $conn->query("SELECT COUNT(*) AS total FROM competition_applications WHERE organizer_id = $user_id AND status = 'rejected'")->fetch_assoc()['total'];
 $participants = $conn->query("SELECT COUNT(*) AS total FROM competition_participants cp INNER JOIN competition_applications ca ON cp.competition_id = ca.id WHERE ca.organizer_id = $user_id")->fetch_assoc()['total'];
 
 $list = $conn->query("SELECT * FROM competition_applications WHERE organizer_id = $user_id ORDER BY id DESC");
@@ -53,25 +57,19 @@ $list = $conn->query("SELECT * FROM competition_applications WHERE organizer_id 
             </a>
         </li>
         <li>
+            <a href="index-organiser.php">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+        </li>
+        <li>
             <a href="profile.php">
                 <i class="fas fa-user"></i>
                 <span>Profile</span>
             </a>
         </li>
-        <li>
-            <a href="manage-competition.php">
-                <i class="fas fa-trophy"></i>
-                <span>Manage Competitions</span>
-            </a>
-        </li>
-        <li>
-            <a href="create-competition.php">
-                <i class="fas fa-plus-circle"></i>
-                <span>Create Competition</span>
-            </a>
-        </li>
         <li class="logout">
-            <a href="../logout.php">
+            <a href="../login.php">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>Logout</span>
             </a>
@@ -84,7 +82,7 @@ $list = $conn->query("SELECT * FROM competition_applications WHERE organizer_id 
     <!-- HEADER -->
     <div class="header--wrapper">
         <div class="header--title">
-            <span>Primary</span>
+            <span>Welcome, <?php echo htmlspecialchars($user_info['fullname']); ?> &nbsp;|&nbsp; <?php echo htmlspecialchars($user_info['email']); ?></span>
             <h2>Organiser Dashboard</h2>
         </div>
         <div class="user--info">
@@ -208,9 +206,14 @@ $list = $conn->query("SELECT * FROM competition_applications WHERE organizer_id 
                                 <i class="fa fa-trash action-icon"></i>
                             </a>
                             <?php if ($row['status'] === 'approved'): ?>
-                            <a href="assign-judge.php?id=<?php echo $row['id']; ?>" title="Assign Judge">
-                                <i class="fa fa-gavel action-icon" style="color:#7163ba;"></i>
-                            </a>
+                                <a href="assign-judge.php?id=<?php echo $row['id']; ?>" title="Assign Judge">
+                                    <i class="fa fa-gavel action-icon" style="color:#7163ba;"></i>
+                                </a>
+                            <?php endif; ?>
+                            <?php if ($row['status'] === 'approved' && strtotime($row['end_date']) < time()): ?>
+                                <a href="review-result.php?id=<?php echo $row['id']; ?>" title="Review Result">
+                                    <i class="fa fa-chart-bar action-icon" style="color:#059669;"></i>
+                                </a>
                             <?php endif; ?>
                         </td>
                     </tr>

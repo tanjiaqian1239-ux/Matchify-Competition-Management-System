@@ -6,38 +6,68 @@ require __DIR__ . '/config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $name = htmlspecialchars($_POST['name']);
-    $email = htmlspecialchars($_POST['email']);
+    $name    = htmlspecialchars($_POST['name']);
+    $email   = htmlspecialchars($_POST['email']);
     $message = htmlspecialchars($_POST['message']);
 
-    $mail = new PHPMailer(true);
-
     try {
-        $mail->isSMTP();
-        $mail->Host       = 'smtp.gmail.com';
-        $mail->SMTPAuth   = true;
-        $mail->Username   = 'tanjiaqian@gmail.com';
-        $mail->Password   = 'Jiaiqan20040520';
-        $mail->SMTPSecure = 'tls';
-        $mail->Port       = 587;
+        $mail = require __DIR__ . "/mailer.php";
 
-        $mail->setFrom($email, $name);
-        $mail->addAddress('yourgmail@gmail.com');
+        $mail->setFrom('tanjiaqian1239@gmail.com', 'Matchify Competition Management Platform');
+        $mail->addAddress('tanjiaqian1239@gmail.com');
+        $mail->addReplyTo($email, $name);
 
         $mail->isHTML(true);
-        $mail->Subject = 'New Contact Message';
+        $mail->Subject = 'New Contact Message from ' . $name;
 
         $mail->Body = "
-            <h3>New Contact Message</h3>
-            <p><b>Name:</b> $name</p>
-            <p><b>Email:</b> $email</p>
-            <p><b>Message:</b><br>$message</p>
+            <!DOCTYPE html>
+            <html>
+            <body style='font-family:Arial,sans-serif; background:#f5f7fb; padding:30px;'>
+              <div style='max-width:520px; margin:auto; background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 8px 30px rgba(0,0,0,0.08);'>
+                
+                <div style='background:linear-gradient(135deg,#6d5dfc,#8a7dff); padding:30px; text-align:center;'>
+                  <h1 style='color:#fff; margin:0; font-size:22px;'>Matchify</h1>
+                  <p style='color:rgba(255,255,255,0.85); margin:6px 0 0; font-size:14px;'>Competition Management Platform</p>
+                </div>
+
+                <div style='padding:30px;'>
+                  <h2 style='color:#111827; margin:0 0 10px;'>New Contact Message</h2>
+                  <div style='background:#f5f3ff; border:1px solid #ddd6fe; border-radius:12px; padding:20px; margin:20px 0;'>
+                    <table style='width:100%; font-size:14px; color:#111827;'>
+                      <tr>
+                        <td style='padding:6px 0; width:80px; color:#6b7280;'>Name</td>
+                        <td style='padding:6px 0;'><b>$name</b></td>
+                      </tr>
+                      <tr>
+                        <td style='padding:6px 0; color:#6b7280;'>Email</td>
+                        <td style='padding:6px 0;'><b>$email</b></td>
+                      </tr>
+                      <tr>
+                        <td style='padding:6px 0; color:#6b7280; vertical-align:top;'>Message</td>
+                        <td style='padding:6px 0;'>$message</td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+
+                <div style='background:#f9fafb; padding:16px; text-align:center; border-top:1px solid #f0f0f0;'>
+                  <p style='margin:0; font-size:12px; color:#9ca3af;'>This is an automated email from Matchify Competition Management Platform.</p>
+                </div>
+
+              </div>
+            </body>
+            </html>
         ";
+
+        $mail->AltBody = "Name: $name\nEmail: $email\nMessage: $message";
 
         $mail->send();
         $success = "Message sent successfully!";
+
     } catch (Exception $e) {
         $success = "Message failed to send.";
+        error_log("[Matchify] Contact mail failed - " . $e->getMessage());
     }
 }
 ?>

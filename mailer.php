@@ -17,6 +17,14 @@ $mail->Password = 'rbjk fqzq prhf owve';
 $mail->SMTPSecure = 'tls';
 $mail->Port = 587;
 
+$mail->SMTPOptions = [
+    'ssl' => [
+        'verify_peer'       => false,
+        'verify_peer_name'  => false,
+        'allow_self_signed' => true,
+    ]
+];
+
 $mail->isHTML(true);
 
 return $mail;

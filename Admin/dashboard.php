@@ -19,7 +19,7 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="profile.css">
                     <i class="fas fa-user"></i>
                     <span>Profile</span>
                 </a>
