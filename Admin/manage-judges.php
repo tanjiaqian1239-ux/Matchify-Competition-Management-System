@@ -1,7 +1,7 @@
 <?php
 session_start();
 include "../config.php";
-
+requireRole(['admin','superadmin']);
 $msg = $_GET['msg'] ?? '';
 
 /* =========================
@@ -73,7 +73,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
                 <span>Profile</span>
             </a>
         </li>
-
+        <li><a href="manage-admin.php"><i class="fas fa-user-shield"></i><span>Manage Admin</span></a></li>
         <li>
             <a href="manage-competition-list.php">
                 <i class="fas fa-list-check"></i>
@@ -85,13 +85,6 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
             <a href="manage-judges.php">
                 <i class="fas fa-gavel"></i>
                 <span>Manage Judges</span>
-            </a>
-        </li>
-
-        <li>
-            <a href="#">
-                <i class="fas fa-cog"></i>
-                <span>Settings</span>
             </a>
         </li>
 

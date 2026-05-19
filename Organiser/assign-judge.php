@@ -102,15 +102,9 @@ if ($uq && $uq->num_rows > 0) {
             </a>
         </li>
         <li>
-            <a href="profile.php">
-                <i class="fas fa-user"></i>
-                <span>Profile</span>
-            </a>
-        </li>
-        <li class="active">
-            <a href="apply-competition.php">
-                <i class="fas fa-trophy"></i>
-                <span>Apply Competition</span>
+            <a href="index-organiser.php">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
             </a>
         </li>
         <li>

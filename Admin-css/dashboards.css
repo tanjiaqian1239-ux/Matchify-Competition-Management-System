@@ -1,0 +1,198 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body{
+    display:flex;
+    background:#f4f6f9;
+}
+
+/* SIDEBAR */
+.sidebar{
+    position: sticky;
+    top: 0;
+    width: 70px;
+    height: 100vh;
+    padding: 0 1.7rem;
+    color: #fff;
+    background: rgba(113, 99, 186, 1);
+    transition: 0.4s;
+}
+
+.sidebar:hover{ width:240px; }
+
+.logo{ height:80px; }
+
+.menu{ list-style:none; height:88%; }
+
+.menu li{
+    padding:1rem;
+    margin:8px 0;
+    border-radius:8px;
+}
+
+.menu li:hover,.active{ background: rgba(255,255,255,0.15); }
+
+.menu a{
+    color:#fff;
+    text-decoration:none;
+    display:flex;
+    gap:1rem;
+}
+
+/* MAIN */
+.main--content{
+    width:100%;
+    padding:1rem;
+}
+
+/* HEADER */
+.header--wrapper{
+    background:#fff;
+    padding:15px 2rem;
+    border-radius:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+/* CARDS */
+.card--container{
+    background:#fff;
+    padding:2rem;
+    border-radius:10px;
+    margin-top:1rem;
+}
+
+.card--wrapper{
+    display:flex;
+    gap:1rem;
+    flex-wrap:wrap;
+}
+
+.competition--card{
+    flex:1;
+    min-width:220px;
+    padding:1.2rem;
+    border-radius:12px;
+    background:#f1f1f1;
+    transition:0.3s;
+}
+
+.competition--card:hover{
+    transform:translateY(-5px);
+}
+
+.card--header{
+    display:flex;
+    justify-content:space-between;
+}
+
+.title{ font-size:13px; color:#555; }
+
+.amount--value{ font-size:22px; font-weight:600; }
+
+.icon{
+    padding:10px;
+    border-radius:50%;
+    color:#fff;
+}
+
+.light-red{ background:#ffe5e5; }
+.light-purple{ background:#efe6ff; }
+.light-blue{ background:#e6f0ff; }
+
+.dark-purple{ background:#7b61ff; }
+.dark-blue{ background:#3b82f6; }
+
+/* TABS */
+.tab--container{
+    display:flex;
+    background:#eee;
+    border-radius:20px;
+    margin:1rem 0;
+    padding:5px;
+}
+
+.tab{
+    flex:1;
+    text-align:center;
+    padding:10px;
+    border-radius:20px;
+}
+
+.tab.active{
+    background:#fff;
+    font-weight:600;
+}
+
+/* CARD DETAIL */
+.section--header{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:1rem;
+}
+
+.pending-label{
+    background:#dbeafe;
+    color:#2563eb;
+    padding:5px 10px;
+    border-radius:10px;
+}
+
+/* ACTIVITY CARD */
+.proposal--card{
+    display:flex;
+    justify-content:space-between;
+    background:#fafafa;
+    padding:1.5rem;
+    border-radius:10px;
+}
+
+.tag{
+    background:#ddd;
+    padding:3px 8px;
+    border-radius:6px;
+    font-size:12px;
+}
+
+.meta{
+    display:flex;
+    gap:15px;
+    font-size:13px;
+    margin-top:10px;
+}
+
+.desc{
+    margin-top:10px;
+    font-size:13px;
+    color:#555;
+}
+
+/* BUTTONS */
+.proposal--right{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.approve{
+    background:#22c55e;
+    color:#fff;
+    border:none;
+    padding:8px 15px;
+    border-radius:8px;
+}
+
+.reject{
+    background:#ef4444;
+    color:#fff;
+    border:none;
+    padding:8px 15px;
+    border-radius:8px;
+}

@@ -1,6 +1,7 @@
 <?php
 session_start();
 include "../config.php";
+requireRole(['admin','superadmin']);
 
 /* =========================
    APPROVE / REJECT ACTION
@@ -111,16 +112,18 @@ if ($status == 'all') {
     <div class="logo"></div>
     <ul class="menu">
 
-        <li class="active">
+        <li class="">
             <a href="dashboard.php">
                 <i class="fas fa-tachometer-alt"></i>
                 <span>Dashboard</span>
             </a>
         </li>
 
-        <li><a href="#"><i class="fas fa-user"></i><span>Profile</span></a></li>
+        <li><a href="profile.php"><i class="fas fa-user"></i><span>Profile</span></a></li>
+        <li><a href="manage-admin.php"><i class="fas fa-user-shield"></i><span>Manage Admin</span></a></li>
+        <li class=""><a href="manage-users.php"><i class="fas fa-users"></i><span>Manage Users</span></a></li>
 
-        <li>
+       <li class="active">
             <a href="manage-competition-list.php">
                 <i class="fas fa-list-check"></i>
                 <span>Manage Competition</span>
@@ -134,9 +137,6 @@ if ($status == 'all') {
             </a>
         </li>
 
-        <li>
-            <a href="#"><i class="fas fa-cog"></i><span>Settings</span></a>
-        </li>
 
         <li class="logout">
             <a href="../login.php">

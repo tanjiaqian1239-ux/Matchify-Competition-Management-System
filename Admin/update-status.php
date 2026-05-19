@@ -1,6 +1,6 @@
 <?php
 include "../config.php";
-
+requireRole(['admin','superadmin']);
 $id = $_GET['id'];
 $action = $_GET['action'];
 

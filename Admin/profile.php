@@ -1,7 +1,7 @@
 <?php
 session_start();
 include "../config.php";
-
+requireRole(['admin','superadmin']);
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../login.php");
     exit();
@@ -126,6 +126,7 @@ if (isset($_POST['change_password'])) $active_tab = 'password';
     <ul class="menu">
         <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
         <li class="active"><a href="profile.php"><i class="fas fa-user"></i><span>Profile</span></a></li>
+        <li class=""><a href="manage-admin.php"><i class="fas fa-user-shield"></i><span>Manage Admin</span></a></li>
         <li><a href="manage-users.php"><i class="fas fa-users"></i><span>Manage Users</span></a></li>
         <li><a href="manage-competition.php"><i class="fas fa-trophy"></i><span>Competitions</span></a></li>
         <li><a href="manage-judges.php"><i class="fas fa-gavel"></i><span>Judges</span></a></li>

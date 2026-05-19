@@ -2,9 +2,6 @@
 session_start();
 include "../config.php";
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../login.php");
     exit();
@@ -61,13 +58,10 @@ if (isset($_POST['publish_result'])) {
         </tr>";
     }
 
-    $mail_errors = [];
-
     foreach ($all_participants as $p) {
         $medal = $p['rank'] == 1 ? '🥇' : ($p['rank'] == 2 ? '🥈' : ($p['rank'] == 3 ? '🥉' : '#' . $p['rank']));
 
         try {
-            // ---- 用 mailer.php，跟 judge email 一样 ----
             $mail = require __DIR__ . "/../mailer.php";
 
             $mail->setFrom('tanjiaqian1239@gmail.com', 'Matchify Competition Management Platform');
@@ -75,7 +69,7 @@ if (isset($_POST['publish_result'])) {
             $mail->isHTML(true);
             $mail->Subject = 'Competition Results Published - ' . $comp['title'];
 
-            $login_url = "http://localhost/Matchify%20Competition%20Management%20System/Participant/my-competition.php";
+            $login_url = "http://localhost/Matchify%20Competition%20Management%20Platform/Participant/my-competition.php";
 
             $mail->Body = "
             <div style='font-family:Arial,sans-serif; max-width:600px; margin:auto; padding:30px; background:#f4f6fb; border-radius:16px;'>
@@ -130,8 +124,7 @@ if (isset($_POST['publish_result'])) {
             $mail->send();
 
         } catch (Exception $e) {
-            $mail_errors[] = $p['email'] . ': ' . $mail->ErrorInfo;
-            error_log("[Matchify] Result email failed for {$p['email']} - " . $mail->ErrorInfo);
+            error_log("[Matchify] Result email failed for {$p['email']} - " . $e->getMessage());
         }
     }
 

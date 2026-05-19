@@ -1,0 +1,183 @@
+/* ======= BACK BUTTON ======= */
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #7163ba;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-bottom: 20px;
+    transition: 0.2s;
+}
+
+.btn-back:hover {
+    opacity: 0.75;
+    transform: translateX(-3px);
+}
+
+/* ======= FLASH ======= */
+.msg-box {
+    padding: 12px 16px;
+    border-radius: 12px;
+    margin-bottom: 18px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.msg-success { background: #d1fae5; color: #065f46; }
+.msg-error   { background: #fee2e2; color: #b91c1c; }
+
+/* ======= FORM CARD ======= */
+.form-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    max-width: 780px;
+}
+
+.form-card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #7163ba;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ======= FORM GRID ======= */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.req { color: #ef4444; }
+
+.form-group small {
+    font-size: 11px;
+    color: #9ca3af;
+}
+
+.form-group input,
+.form-group select {
+    padding: 10px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: Poppins, sans-serif;
+    outline: none;
+    background: #fafafa;
+    transition: 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #7163ba;
+    box-shadow: 0 0 0 3px rgba(113,99,186,0.12);
+    background: #fff;
+}
+
+/* ======= PASSWORD WRAPPER ======= */
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    padding-right: 42px;
+}
+
+.toggle-password{
+    position:absolute;
+    right:12px;
+    top:50%;
+    transform:translateY(-50%);
+    width:20px;
+    height:20px;
+    cursor:pointer;
+
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%239ca3af' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M13.875 18.825A10.05 10.05 0 0 1 12 19c-7 0-11-7-11-7a18.5 18.5 0 0 1 5.1-5.9M9.88 4.24A9.9 9.9 0 0 1 12 4c7 0 11 7 11 7a18.6 18.6 0 0 1-4.23 5.3'/%3E%3Cline x1='1' y1='1' x2='23' y2='23'/%3E%3C/svg%3E")
+    no-repeat center;
+    background-size:contain;
+}
+
+.toggle-password.active{
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%237163ba' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E")
+    no-repeat center;
+    background-size:contain;
+}
+/* ======= FORM ERROR ======= */
+.form-error {
+    display: block;
+    color: #b91c1c;
+    font-size: 12px;
+    margin-top: 12px;
+    min-height: 16px;
+}
+
+/* ======= FORM ACTIONS ======= */
+.form-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 24px;
+}
+
+.btn-cancel {
+    padding: 11px 24px;
+    background: #f3f4f6;
+    color: #374151;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.btn-cancel:hover { background: #e5e7eb; }
+
+.btn-submit {
+    padding: 11px 28px;
+    background: #7163ba;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: Poppins, sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.2s;
+}
+
+.btn-submit:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+}
+
+/* ======= RESPONSIVE ======= */
+@media (max-width: 600px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .form-card { padding: 20px; }
+    .form-actions { flex-direction: column; }
+    .btn-cancel,
+    .btn-submit { width: 100%; justify-content: center; }
+}
