@@ -2,16 +2,12 @@
 session_start();
 include "../config.php";
 
-/* =========================
-   SEARCH + CATEGORY FILTER
-========================= */
 $search = "";
 $category_filter = "";
 $selected_category = "All";
 
 if (isset($_GET['category']) && $_GET['category'] != "") {
     $selected_category = $_GET['category'];
-
     if ($selected_category != "All") {
         $safe_category = $conn->real_escape_string($selected_category);
         $category_filter = "AND category='$safe_category'";
@@ -23,9 +19,6 @@ if (isset($_POST['search'])) {
     $search = "AND title LIKE '%$keyword%'";
 }
 
-/* =========================
-   CATEGORY LIST
-========================= */
 $category_sql = "SELECT DISTINCT category 
                  FROM competition_applications 
                  WHERE status='approved' 
@@ -35,32 +28,28 @@ $category_sql = "SELECT DISTINCT category
 $category_result = $conn->query($category_sql);
 
 /* =========================
-   COMPETITIONS
+   只显示 end_date >= 今天 的比赛
 ========================= */
+$today = date('Y-m-d');
+
 $sql = "SELECT * FROM competition_applications 
         WHERE status='approved' 
+        AND end_date >= '$today'
         $search 
         $category_filter
         ORDER BY start_date ASC";
 
 $result = $conn->query($sql);
 
-/* =========================
-   PROFILE IMAGE (FIXED)
-========================= */
 $profile_image = "../images/profile.avif";
 
 if (isset($_SESSION['user_id'])) {
     $user_id = (int) $_SESSION['user_id'];
-
     $user_query = $conn->query("SELECT profile_image FROM users WHERE id = $user_id");
-
     if ($user_query && $user_query->num_rows > 0) {
         $user = $user_query->fetch_assoc();
-
         if (!empty($user['profile_image']) && $user['profile_image'] != "default.png") {
             $path = "/images/profile/" . $user['profile_image'];
-
             if (file_exists($_SERVER['DOCUMENT_ROOT'] . $path)) {
                 $profile_image = $path;
             }
@@ -74,63 +63,63 @@ if (isset($_SESSION['user_id'])) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Competition List</title>
 <link rel="icon" href="../images/logo.png">
-
 <link rel="stylesheet" href="../css/style.css">
 <link rel="stylesheet" href="../Participant-css/competition-list.css">
-
 <style>
 .buttons{
     display:flex;
     gap:10px;
 }
 
-.btn-view, .btn-join{
+.btn-view, .btn-join, .btn-closed{
     padding:10px 14px;
     border-radius:10px;
     text-decoration:none;
     font-weight:600;
     text-align:center;
     flex:1;
+    font-size:14px;
 }
 
 .btn-view{
-    background:#e0e7ff;
-    color:#4f46e5;
-}
-
-.btn-join{
-    background:linear-gradient(135deg,#6c63ff,#a855f7);
+    background:#007bff;
     color:#fff;
 }
 
-.btn-join:hover, .btn-view:hover{
-    opacity:0.85;
+.btn-view:hover{ background:#0069d9; }
+
+.btn-join{
+    background:#28a745;
+    color:#fff;
+}
+
+.btn-join:hover{ background:#23923d; }
+
+/* 已关闭 */
+.btn-closed{
+    background:#e0e0e0;
+    color:#999;
+    cursor:not-allowed;
+    pointer-events:none;
 }
 </style>
-
 </head>
 
 <body>
 
 <div class="hero competition-page">
 
-<!-- NAV -->
 <nav class="main-nav">
-
     <img src="../images/logo.png" class="logo">
-
     <ul>
         <li><a href="../Participant/index(participant).php">Home</a></li>
         <li><a href="../Participant/competition-list.php" class="active">Competition List</a></li>
         <li><a href="../Participant/about.php">About</a></li>
         <li><a href="../Participant/contact.php">Contact</a></li>
     </ul>
-
     <div class="nav-right">
-
         <?php if (!isset($_SESSION['user_id'])): ?>
             <a href="../login.php" class="btn">Login</a>
         <?php else: ?>
@@ -143,15 +132,11 @@ if (isset($_SESSION['user_id'])) {
                 </div>
             </div>
         <?php endif; ?>
-
     </div>
-
 </nav>
 
-<!-- CONTENT -->
 <div class="container">
 
-    <!-- SEARCH -->
     <div class="top-bar">
         <form method="POST" class="search-box">
             <input type="text" name="keyword" placeholder="Search competitions...">
@@ -159,33 +144,27 @@ if (isset($_SESSION['user_id'])) {
         </form>
     </div>
 
-    <!-- CATEGORY -->
     <div class="category-bar">
-
         <a href="competition-list.php?category=All"
-           class="cat-btn <?php if($selected_category=="All") echo 'active'; ?>">
-           All
-        </a>
-
+           class="cat-btn <?php if($selected_category=="All") echo 'active'; ?>">All</a>
         <?php while($cat = $category_result->fetch_assoc()): ?>
             <a href="competition-list.php?category=<?php echo urlencode($cat['category']); ?>"
                class="cat-btn <?php if($selected_category==$cat['category']) echo 'active'; ?>">
                <?php echo htmlspecialchars($cat['category']); ?>
             </a>
         <?php endwhile; ?>
-
     </div>
 
-    <h2 class="title">
-        <?php echo $result->num_rows; ?> Competitions Available
-    </h2>
+    <h2 class="title"><?php echo $result->num_rows; ?> Competitions Available</h2>
 
-    <!-- GRID -->
     <div class="grid">
 
     <?php if ($result->num_rows > 0): ?>
-
         <?php while($row = $result->fetch_assoc()): ?>
+
+        <?php
+            $isClosed = ($row['end_date'] < $today);
+        ?>
 
         <div class="card">
 
@@ -196,15 +175,11 @@ if (isset($_SESSION['user_id'])) {
 
             <div class="card-body">
 
-                <span class="tag">
-                    <?php echo htmlspecialchars($row['category']); ?>
-                </span>
+                <span class="tag"><?php echo htmlspecialchars($row['category']); ?></span>
 
                 <h3><?php echo htmlspecialchars($row['title']); ?></h3>
 
-                <p class="desc">
-                    <?php echo htmlspecialchars(substr($row['description'],0,90)); ?>...
-                </p>
+                <p class="desc"><?php echo htmlspecialchars(substr($row['description'],0,90)); ?>...</p>
 
                 <p class="deadline">
                     📅 <?php echo $row['start_date']; ?> → <?php echo $row['end_date']; ?>
@@ -212,15 +187,17 @@ if (isset($_SESSION['user_id'])) {
 
                 <div class="buttons">
 
-                    <!-- FIXED VIEW DETAILS -->
                     <a href="competition_detail.php?id=<?php echo $row['id']; ?>" class="btn-view">
                         View Details
                     </a>
 
-                    <!-- FIXED APPLY -->
-                    <a href="apply_competition.php?id=<?php echo $row['id']; ?>" class="btn-join">
-                        Join Now
-                    </a>
+                    <?php if ($isClosed): ?>
+                        <span class="btn-closed">🔒 Closed</span>
+                    <?php else: ?>
+                        <a href="apply_competition.php?id=<?php echo $row['id']; ?>" class="btn-join">
+                            Join Now
+                        </a>
+                    <?php endif; ?>
 
                 </div>
 
@@ -228,7 +205,6 @@ if (isset($_SESSION['user_id'])) {
         </div>
 
         <?php endwhile; ?>
-
     <?php else: ?>
         <p>No competitions found</p>
     <?php endif; ?>
@@ -236,7 +212,6 @@ if (isset($_SESSION['user_id'])) {
     </div>
 
 </div>
-
 </div>
 
 <script>
@@ -244,11 +219,9 @@ function toggleMenu(){
     const menu = document.getElementById("dropdownMenu");
     menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
 }
-
 document.addEventListener("click", function(e){
     const dropdown = document.querySelector(".profile-dropdown");
     const menu = document.getElementById("dropdownMenu");
-
     if (dropdown && !dropdown.contains(e.target)) {
         menu.style.display = "none";
     }

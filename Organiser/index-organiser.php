@@ -29,7 +29,7 @@ if (isset($_SESSION['user_id'])) {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/png" href="../images/logo.png">
-<title>Matchify Competition Management System</title>
+<title>Matchify Competition Management Platform</title>
 <link rel="stylesheet" href="../Organiser-css/index-organiser.css">
 </head>
 
@@ -41,10 +41,10 @@ if (isset($_SESSION['user_id'])) {
     <img src="../images/logo.png" class="logo">
 
     <ul>
-        <li><a href="../Organiser/index(participant).php">Home</a></li>
+        <li><a href="../Organiser/index-organiser.php">Home</a></li>
         <li><a href="../Organiser/competition-list.php">Competition List</a></li>
         <li><a href="../Organiser/about.php">About</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><a href="../Contact.php">Contact</a></li>
     </ul>
 
     <div class="nav-right">

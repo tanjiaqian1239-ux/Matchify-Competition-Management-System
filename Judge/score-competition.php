@@ -25,7 +25,7 @@ $comp = $conn->query("SELECT * FROM competition_applications WHERE id = $competi
 // Check if competition has ended (scoring opens next day after end_date)
 $now          = new DateTime();
 $end_date     = new DateTime($comp['end_date']);
-$scoring_open = ($now >= (clone $end_date)->modify('+1 day'));
+$scoring_open = ($now > $end_date);
 
 // Check if result is already published (lock scoring)
 $result_published = isset($comp['result_status']) && $comp['result_status'] === 'published';
@@ -118,7 +118,7 @@ $participants = $conn->query("
             </a>
         </li>
         <li class="logout">
-            <a href="../logout.php">
+            <a href="../login.php">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>Logout</span>
             </a>

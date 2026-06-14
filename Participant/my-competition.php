@@ -63,12 +63,11 @@ body { margin:0; font-family:Poppins,sans-serif; background:#f4f6fb; }
 
 .actions { display:flex; flex-direction:column; gap:8px; text-align:right; }
 
-.btn { padding:8px 14px; border-radius:8px; text-decoration:none; font-size:13px; font-weight:600; text-align:center; }
+.btn { padding:8px 14px; border-radius:8px; text-decoration:none; font-size:13px; font-weight:600; text-align:center; display:block; }
 .submit   { background:#6c63ff; color:#fff; }
 .submit:hover { opacity:0.85; }
-.disabled { background:#ccc; color:#666; }
+.disabled { background:#ccc; color:#666; cursor:not-allowed; }
 
-/* RESULT SECTION */
 .result-section {
     margin-top:16px;
     padding-top:16px;
@@ -126,8 +125,8 @@ body { margin:0; font-family:Poppins,sans-serif; background:#f4f6fb; }
 <?php while($row = $result->fetch_assoc()): ?>
 
 <?php
-$start = $row['start_date'];
-$end   = $row['end_date'];
+$start   = $row['start_date'];
+$end     = $row['end_date'];
 $comp_id = $row['competition_id'];
 
 if ($today < $start) {
@@ -138,15 +137,14 @@ if ($today < $start) {
     $status = "ongoing"; $status_text = "Ongoing";
 }
 
-$can_submit = ($status == "ongoing");
+/* Submit 只要 end_date 还没到就可以 */
+$can_submit = ($today <= $end);
 
-// Get my score and ranking if result is published
 $my_score = null;
 $my_rank  = null;
 $all_ranks = [];
 
 if ($row['result_status'] === 'published') {
-
     $rank_query = $conn->prepare("
         SELECT p.id, u.fullname, ROUND(AVG(s.score),2) as avg_score
         FROM competition_participants p
@@ -182,16 +180,17 @@ if ($row['result_status'] === 'published') {
         </div>
 
         <div class="actions">
-            <a class="btn" href="../Participant/competition-detail.php?id=<?= $comp_id ?>">View Detail</a>
+            <!-- FIXED: 去掉 ../Participant/ 前缀，文件在同一文件夹 -->
+            <a class="btn" href="competition_detail.php?id=<?= $comp_id ?>">View Detail</a>
+
             <?php if ($can_submit): ?>
-                <a class="btn submit" href="../Participant/submit-work.php?id=<?= $comp_id ?>">Submit Work 📤</a>
+                <a class="btn submit" href="submit-work.php?id=<?= $comp_id ?>">Submit Work 📤</a>
             <?php else: ?>
                 <div class="btn disabled">Submit Closed</div>
             <?php endif; ?>
         </div>
     </div>
 
-    <!-- RESULT SECTION -->
     <?php if ($row['result_status'] === 'published'): ?>
     <div class="result-section">
         <div class="result-title">🏆 Competition Result</div>
@@ -213,7 +212,6 @@ if ($row['result_status'] === 'published') {
             </div>
         </div>
 
-        <!-- Full ranking -->
         <table class="ranking-table">
             <thead>
                 <tr><th>Rank</th><th>Participant</th><th>Score</th></tr>

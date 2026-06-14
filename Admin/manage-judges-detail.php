@@ -2,8 +2,6 @@
 session_start();
 include "../config.php";
 requireRole(['admin','superadmin']);
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 
 $comp_id = intval($_GET['id'] ?? 0);
 
@@ -141,7 +139,7 @@ if (isset($_GET['action']) && isset($_GET['judge_id'])) {
                             You have been assigned as a judge for a new competition:
                           </p>
                           <div style='background:#f5f3ff; border:1px solid #ddd6fe; border-radius:12px; padding:16px; margin:16px 0;'>
-                            <b style='color:#4c1d95;'>🏆 $comp_title</b>
+                            <b style='color:#4c1d95;'> $comp_title</b>
                           </div>
                           <p style='color:#4b5563; font-size:14px;'>Please login with your existing account to view and score this competition.</p>
                           <div style='text-align:center; margin:24px 0 10px;'>

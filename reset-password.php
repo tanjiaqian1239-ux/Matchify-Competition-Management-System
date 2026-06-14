@@ -33,7 +33,7 @@ if (strtotime($user["reset_token_expires_at"]) <= time()) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="images/logo.png">
-    <title>Reset Password - Matchify Competition Management System</title>
+    <title>Reset Password - Matchify Competition Management Platform</title>
     <link rel="stylesheet" href="css/reset-password.css">
 </head>
 <body>

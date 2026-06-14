@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         $mail->Subject = "Reset Your Password - Matchify";
 
-        $resetLink = "http://localhost/Matchify%20Competition%20Management%20System/reset-password.php?token=$token";
+        $resetLink = "http://localhost/Matchify%20Competition%20Management%20Platform   /reset-password.php?token=$token";
 
         $mail->Body = "
         <h2>Password Reset</h2>
@@ -61,17 +61,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $redirect = "login.php";
         } catch (Exception $e) {
             $message = "❌ Email failed: " . $mail->ErrorInfo;
-            $redirect = "forgot-password.php";
+            $redirect = "forgetpassword.php";
         }
 
     } else {
         $message = "❌ Email not found!";
-        $redirect = "forgot-password.php";
+        $redirect = "forgetpassword.php";
     }
 
 } else {
     $message = "❌ Invalid request!";
-    $redirect = "forgot-password.php";
+    $redirect = "forgetpassword.php";
 }
 ?>
 

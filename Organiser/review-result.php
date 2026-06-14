@@ -47,79 +47,203 @@ if (isset($_POST['publish_result'])) {
         $all_participants[] = $r;
     }
 
+    // Build ranking table HTML
     $ranking_html = "";
     foreach ($all_participants as $p) {
-        $medal = $p['rank'] == 1 ? '🥇' : ($p['rank'] == 2 ? '🥈' : ($p['rank'] == 3 ? '🥉' : '#' . $p['rank']));
+        $rank_label = $p['rank'] == 1 ? '1st' : ($p['rank'] == 2 ? '2nd' : ($p['rank'] == 3 ? '3rd' : '#' . $p['rank']));
         $ranking_html .= "
         <tr>
-            <td style='padding:10px; text-align:center;'>{$medal}</td>
+            <td style='padding:10px; text-align:center;'>{$rank_label}</td>
             <td style='padding:10px;'>" . htmlspecialchars($p['fullname']) . "</td>
-            <td style='padding:10px; text-align:center; font-weight:700;'>" . ($p['average_score'] ?? '—') . "</td>
+            <td style='padding:10px; text-align:center; font-weight:700;'>" . ($p['average_score'] ?? '-') . "</td>
         </tr>";
     }
 
+    $organiser_name  = $comp['organizer'] ?? 'The Organiser';
+    $organiser_email = $comp['email'] ?? '';
+    $prize_1st = $comp['prize_1st'] ?? null;
+    $prize_2nd = $comp['prize_2nd'] ?? null;
+    $prize_3rd = $comp['prize_3rd'] ?? null;
+    $login_url = "http://localhost/Matchify%20Competition%20Management%20Platform/Participant/my-competition.php";
+
     foreach ($all_participants as $p) {
-        $medal = $p['rank'] == 1 ? '🥇' : ($p['rank'] == 2 ? '🥈' : ($p['rank'] == 3 ? '🥉' : '#' . $p['rank']));
+        $rank_label = $p['rank'] == 1 ? '1st Place' : ($p['rank'] == 2 ? '2nd Place' : ($p['rank'] == 3 ? '3rd Place' : 'Rank #' . $p['rank']));
+        $is_winner = ($p['rank'] <= 3);
+
+        $prize = null;
+        if ($p['rank'] == 1 && $prize_1st) $prize = $prize_1st;
+        elseif ($p['rank'] == 2 && $prize_2nd) $prize = $prize_2nd;
+        elseif ($p['rank'] == 3 && $prize_3rd) $prize = $prize_3rd;
 
         try {
             $mail = require __DIR__ . "/../mailer.php";
-
             $mail->setFrom('tanjiaqian1239@gmail.com', 'Matchify Competition Management Platform');
             $mail->addAddress($p['email'], $p['fullname']);
             $mail->isHTML(true);
-            $mail->Subject = 'Competition Results Published - ' . $comp['title'];
+            $mail->Subject = 'Competition Results - ' . $comp['title'];
 
-            $login_url = "http://localhost/Matchify%20Competition%20Management%20Platform/Participant/my-competition.php";
+            if ($is_winner) {
 
-            $mail->Body = "
-            <div style='font-family:Arial,sans-serif; max-width:600px; margin:auto; padding:30px; background:#f4f6fb; border-radius:16px;'>
-
-                <div style='background:linear-gradient(135deg,#6c63ff,#a855f7); padding:30px; border-radius:12px; text-align:center; margin-bottom:24px;'>
-                    <h1 style='color:#fff; margin:0; font-size:22px;'>Results Published!</h1>
-                    <p style='color:rgba(255,255,255,0.85); margin:8px 0 0; font-size:14px;'>" . htmlspecialchars($comp['title']) . "</p>
-                </div>
-
-                <div style='background:#fff; padding:24px; border-radius:12px; margin-bottom:16px;'>
-                    <p style='color:#333; font-size:15px;'>Hello <b>" . htmlspecialchars($p['fullname']) . "</b>,</p>
-                    <p style='color:#555; font-size:14px; margin-top:10px;'>
-                        The results for <b>" . htmlspecialchars($comp['title']) . "</b> have been published!
-                    </p>
-
-                    <div style='background:#f0eeff; padding:16px 20px; border-radius:10px; margin:16px 0; text-align:center;'>
-                        <p style='margin:0; color:#555; font-size:13px;'>Your Ranking</p>
-                        <p style='margin:8px 0 0; font-size:32px;'>{$medal}</p>
-                        <p style='margin:4px 0 0; color:#333; font-size:16px; font-weight:700;'>
-                            Score: " . ($p['average_score'] ?? '—') . " / 100
-                        </p>
-                    </div>
-
-                    <p style='color:#555; font-size:14px; margin-top:16px;'>Full Rankings:</p>
-                    <table style='width:100%; border-collapse:collapse; font-size:13px;'>
-                        <thead>
-                            <tr style='background:#f4f4f4;'>
-                                <th style='padding:10px; text-align:center;'>Rank</th>
-                                <th style='padding:10px; text-align:left;'>Participant</th>
-                                <th style='padding:10px; text-align:center;'>Score</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {$ranking_html}
-                        </tbody>
+                $prize_section = "";
+                if ($prize) {
+                    $prize_section = "
+                    <table width='100%' cellpadding='0' cellspacing='0' style='background:#fffbeb; border:1px solid #fde68a; border-radius:10px; margin:16px 0;'>
+                        <tr><td style='padding:16px 20px;'>
+                            <p style='margin:0 0 6px; font-size:12px; color:#92400e; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;'>Your Prize</p>
+                            <p style='margin:0; font-size:18px; font-weight:800; color:#b45309;'>{$prize}</p>
+                        </td></tr>
                     </table>
+                    <table width='100%' cellpadding='0' cellspacing='0' style='background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; margin:16px 0;'>
+                        <tr><td style='padding:16px 20px;'>
+                            <p style='margin:0 0 8px; font-size:13px; color:#166534; font-weight:700;'>How to Claim Your Prize</p>
+                            <p style='margin:0; font-size:14px; color:#15803d; line-height:1.7;'>Please contact the organiser to arrange prize collection:</p>
+                            <p style='margin:8px 0 0; font-size:14px; color:#166534;'>
+                                <b>Organiser:</b> {$organiser_name}<br>
+                                <b>Email:</b> <a href='mailto:{$organiser_email}' style='color:#16a34a;'>{$organiser_email}</a>
+                            </p>
+                        </td></tr>
+                    </table>";
+                }
 
-                    <div style='text-align:center; margin-top:20px;'>
-                        <a href='{$login_url}'
-                           style='display:inline-block; padding:12px 28px; background:linear-gradient(135deg,#6c63ff,#a855f7); color:#fff; border-radius:10px; text-decoration:none; font-weight:600; font-size:14px;'>
-                           View My Results
-                        </a>
-                    </div>
-                </div>
+                $mail->Body = "
+                <!DOCTYPE html>
+                <html>
+                <body style='margin:0; padding:0; background:#f4f6f9; font-family:Arial, sans-serif;'>
+                  <table width='100%' cellpadding='0' cellspacing='0' style='padding:40px 0;'>
+                    <tr><td align='center'>
+                      <table width='560' cellpadding='0' cellspacing='0' style='background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.08);'>
 
-                <p style='text-align:center; color:#aaa; font-size:12px;'>Matchify Competition Management Platform</p>
-            </div>
-            ";
+                        <tr>
+                          <td style='background:linear-gradient(135deg,#6c63ff,#a855f7); padding:32px 40px; text-align:center;'>
+                            <h1 style='margin:0; color:#fff; font-size:24px; font-weight:800;'>Congratulations!</h1>
+                            <p style='margin:8px 0 0; color:rgba(255,255,255,0.85); font-size:14px;'>" . htmlspecialchars($comp['title']) . "</p>
+                          </td>
+                        </tr>
 
-            $mail->AltBody = "Hello {$p['fullname']}, results for {$comp['title']} have been published. Your rank: {$medal}, Score: " . ($p['average_score'] ?? '—') . ". View: {$login_url}";
+                        <tr>
+                          <td style='padding:32px 40px;'>
+                            <p style='margin:0 0 6px; font-size:17px; font-weight:700; color:#111827;'>Dear " . htmlspecialchars($p['fullname']) . ",</p>
+                            <p style='margin:12px 0; font-size:14px; color:#4b5563; line-height:1.8;'>
+                                We are thrilled to announce that you have achieved <strong>{$rank_label}</strong> in <strong>" . htmlspecialchars($comp['title']) . "</strong>. Congratulations on your outstanding performance!
+                            </p>
+
+                            <table width='100%' cellpadding='0' cellspacing='0' style='background:#f0eeff; border-radius:12px; margin:20px 0;'>
+                                <tr><td style='padding:20px; text-align:center;'>
+                                    <p style='margin:0; font-size:12px; color:#7c3aed; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;'>Your Result</p>
+                                    <p style='margin:10px 0 4px; font-size:28px; font-weight:800; color:#1e1b4b;'>{$rank_label}</p>
+                                    <p style='margin:6px 0 0; font-size:16px; color:#6c63ff; font-weight:700;'>Score: " . ($p['average_score'] ?? '-') . " / 100</p>
+                                </td></tr>
+                            </table>
+
+                            {$prize_section}
+
+                            <p style='margin:16px 0 8px; font-size:14px; color:#555; font-weight:700;'>Full Rankings:</p>
+                            <table width='100%' cellpadding='0' cellspacing='0' style='border-collapse:collapse; font-size:13px;'>
+                                <thead>
+                                    <tr style='background:#f4f4f4;'>
+                                        <th style='padding:10px; text-align:center;'>Rank</th>
+                                        <th style='padding:10px; text-align:left;'>Participant</th>
+                                        <th style='padding:10px; text-align:center;'>Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>{$ranking_html}</tbody>
+                            </table>
+
+                            <table width='100%' cellpadding='0' cellspacing='0' style='margin-top:24px;'>
+                                <tr><td align='center'>
+                                    <a href='{$login_url}' style='display:inline-block; padding:14px 36px; background:linear-gradient(135deg,#6c63ff,#a855f7); color:#fff; border-radius:8px; text-decoration:none; font-size:14px; font-weight:700;'>
+                                        View My Results
+                                    </a>
+                                </td></tr>
+                            </table>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td style='background:#f9fafb; border-top:1px solid #f0f0f0; padding:16px 40px; text-align:center;'>
+                            <p style='margin:0; font-size:12px; color:#9ca3af;'>Matchify Competition Management Platform</p>
+                          </td>
+                        </tr>
+
+                      </table>
+                    </td></tr>
+                  </table>
+                </body>
+                </html>";
+
+            } else {
+
+                $mail->Body = "
+                <!DOCTYPE html>
+                <html>
+                <body style='margin:0; padding:0; background:#f4f6f9; font-family:Arial, sans-serif;'>
+                  <table width='100%' cellpadding='0' cellspacing='0' style='padding:40px 0;'>
+                    <tr><td align='center'>
+                      <table width='560' cellpadding='0' cellspacing='0' style='background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.08);'>
+
+                        <tr>
+                          <td style='background:linear-gradient(135deg,#6c63ff,#a855f7); padding:32px 40px; text-align:center;'>
+                            <h1 style='margin:0; color:#fff; font-size:22px; font-weight:800;'>Competition Results</h1>
+                            <p style='margin:8px 0 0; color:rgba(255,255,255,0.85); font-size:14px;'>" . htmlspecialchars($comp['title']) . "</p>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td style='padding:32px 40px;'>
+                            <p style='margin:0 0 6px; font-size:17px; font-weight:700; color:#111827;'>Dear " . htmlspecialchars($p['fullname']) . ",</p>
+                            <p style='margin:12px 0; font-size:14px; color:#4b5563; line-height:1.8;'>
+                                Thank you for participating in <strong>" . htmlspecialchars($comp['title']) . "</strong>. We sincerely appreciate your effort and dedication throughout the competition.
+                            </p>
+                            <p style='margin:0 0 20px; font-size:14px; color:#4b5563; line-height:1.8;'>
+                                Unfortunately, you did not place in the top 3 this time. We hope this experience has been valuable and encourages you to keep pushing forward. We look forward to seeing you in future competitions.
+                            </p>
+
+                            <table width='100%' cellpadding='0' cellspacing='0' style='background:#f0eeff; border-radius:12px; margin:20px 0;'>
+                                <tr><td style='padding:20px; text-align:center;'>
+                                    <p style='margin:0; font-size:12px; color:#7c3aed; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;'>Your Result</p>
+                                    <p style='margin:10px 0 4px; font-size:26px; font-weight:800; color:#1e1b4b;'>{$rank_label}</p>
+                                    <p style='margin:6px 0 0; font-size:16px; color:#6c63ff; font-weight:700;'>Score: " . ($p['average_score'] ?? '-') . " / 100</p>
+                                </td></tr>
+                            </table>
+
+                            <p style='margin:16px 0 8px; font-size:14px; color:#555; font-weight:700;'>Full Rankings:</p>
+                            <table width='100%' cellpadding='0' cellspacing='0' style='border-collapse:collapse; font-size:13px;'>
+                                <thead>
+                                    <tr style='background:#f4f4f4;'>
+                                        <th style='padding:10px; text-align:center;'>Rank</th>
+                                        <th style='padding:10px; text-align:left;'>Participant</th>
+                                        <th style='padding:10px; text-align:center;'>Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>{$ranking_html}</tbody>
+                            </table>
+
+                            <table width='100%' cellpadding='0' cellspacing='0' style='margin-top:24px;'>
+                                <tr><td align='center'>
+                                    <a href='{$login_url}' style='display:inline-block; padding:14px 36px; background:linear-gradient(135deg,#6c63ff,#a855f7); color:#fff; border-radius:8px; text-decoration:none; font-size:14px; font-weight:700;'>
+                                        View My Results
+                                    </a>
+                                </td></tr>
+                            </table>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td style='background:#f9fafb; border-top:1px solid #f0f0f0; padding:16px 40px; text-align:center;'>
+                            <p style='margin:0; font-size:12px; color:#9ca3af;'>Matchify Competition Management Platform</p>
+                          </td>
+                        </tr>
+
+                      </table>
+                    </td></tr>
+                  </table>
+                </body>
+                </html>";
+            }
+
+            $mail->AltBody = $is_winner
+                ? "Congratulations {$p['fullname']}! You achieved {$rank_label} in {$comp['title']}. Score: " . ($p['average_score'] ?? '-') . ". Prize: {$prize}. Contact organiser at {$organiser_email} to claim your prize."
+                : "Dear {$p['fullname']}, thank you for participating in {$comp['title']}. Unfortunately you did not place in the top 3. Your result: {$rank_label}, Score: " . ($p['average_score'] ?? '-') . ".";
 
             $mail->send();
 
@@ -229,15 +353,15 @@ if ($uq && $uq->num_rows > 0) {
 
         <div class="comp-info">
             <h2><?= htmlspecialchars($comp['title']) ?></h2>
-            <p>📌 <?= htmlspecialchars($comp['category']) ?> &nbsp;|&nbsp; 🏆 <?= $comp['start_date'] ?> → <?= $comp['end_date'] ?></p>
+            <p><?= htmlspecialchars($comp['category']) ?> | <?= $comp['start_date'] ?> → <?= $comp['end_date'] ?></p>
         </div>
 
         <?php if ($msg === 'published'): ?>
-            <div class="msg-box success">✅ Result published and email sent to all participants!</div>
+            <div class="msg-box success">Result published and email sent to all participants!</div>
         <?php endif; ?>
 
         <div class="card--container">
-            <div class="section-title">👨‍⚖️ Judge Progress</div>
+            <div class="section-title">Judge Progress</div>
             <?php if (empty($judge_progress)): ?>
                 <p style="color:#aaa; text-align:center; padding:20px;">No judges assigned yet.</p>
             <?php else: ?>
@@ -254,9 +378,9 @@ if ($uq && $uq->num_rows > 0) {
                         <td><?= $jp['scored'] ?> / <?= $total_participants ?></td>
                         <td>
                             <?php if ($jp['done']): ?>
-                                <span class="status completed">✅ Completed</span>
+                                <span class="status completed">Completed</span>
                             <?php else: ?>
-                                <span class="status pending">⏳ In Progress</span>
+                                <span class="status pending">In Progress</span>
                             <?php endif; ?>
                         </td>
                     </tr>
@@ -267,7 +391,7 @@ if ($uq && $uq->num_rows > 0) {
         </div>
 
         <div class="card--container">
-            <div class="section-title">🏆 Participant Ranking</div>
+            <div class="section-title">Participant Ranking</div>
             <table class="result-table">
                 <thead>
                     <tr><th>Rank</th><th>Participant</th><th>Average Score</th><th>Total Scores Given</th></tr>
@@ -275,9 +399,9 @@ if ($uq && $uq->num_rows > 0) {
                 <tbody>
                 <?php $rank = 1; while ($p = $participants->fetch_assoc()): ?>
                     <tr>
-                        <td><?= $rank == 1 ? '🥇' : ($rank == 2 ? '🥈' : ($rank == 3 ? '🥉' : '#'.$rank)) ?></td>
+                        <td><?= $rank == 1 ? '1st' : ($rank == 2 ? '2nd' : ($rank == 3 ? '3rd' : '#'.$rank)) ?></td>
                         <td><?= htmlspecialchars($p['fullname']) ?></td>
-                        <td><?= $p['average_score'] ?? '—' ?></td>
+                        <td><?= $p['average_score'] ?? '-' ?></td>
                         <td><?= $p['total_scores'] ?></td>
                     </tr>
                 <?php $rank++; endwhile; ?>
@@ -288,17 +412,17 @@ if ($uq && $uq->num_rows > 0) {
         <div class="publish-box">
             <?php if ($all_completed): ?>
                 <?php if (($comp['result_status'] ?? '') === 'published'): ?>
-                    <div class="published-label">✅ Result Already Published</div>
+                    <div class="published-label">Result Already Published</div>
                 <?php else: ?>
                     <form method="POST">
                         <button type="submit" name="publish_result" class="btn-publish"
                                 onclick="return confirm('Publish result and notify all participants by email?')">
-                            🚀 Publish Result & Notify Participants
+                            Publish Result and Notify Participants
                         </button>
                     </form>
                 <?php endif; ?>
             <?php else: ?>
-                <div class="publish-warning">⚠️ All judges must complete scoring before publishing result.</div>
+                <div class="publish-warning">All judges must complete scoring before publishing result.</div>
             <?php endif; ?>
         </div>
 

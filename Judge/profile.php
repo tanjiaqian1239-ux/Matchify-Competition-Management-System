@@ -11,17 +11,11 @@ $user_id = (int)$_SESSION['user_id'];
 $success = '';
 $error   = '';
 
-/* =========================
-   GET USER DATA
-========================= */
 $stmt = $conn->prepare("SELECT * FROM users WHERE id=?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $user = $stmt->get_result()->fetch_assoc();
 
-/* =========================
-   UPDATE PROFILE (name + phone only)
-========================= */
 if (isset($_POST['update_profile'])) {
     $fullname = trim($_POST['fullname']);
     $phone    = trim($_POST['phone']);
@@ -31,26 +25,19 @@ if (isset($_POST['update_profile'])) {
     $upd->execute();
     $success = 'Profile updated successfully!';
 
-    // Refresh user data
     $stmt = $conn->prepare("SELECT * FROM users WHERE id=?");
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
     $user = $stmt->get_result()->fetch_assoc();
 }
 
-/* =========================
-   CHANGE PASSWORD
-========================= */
 if (isset($_POST['change_password'])) {
-    $current  = $_POST['current_password'];
     $new_pass = $_POST['new_password'];
     $confirm  = $_POST['confirm_password'];
 
     $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/';
 
-    if (!password_verify($current, $user['password'])) {
-        $error = 'Current password is incorrect.';
-    } elseif (!preg_match($pattern, $new_pass)) {
+    if (!preg_match($pattern, $new_pass)) {
         $error = 'Password must be at least 8 characters and include uppercase, lowercase, number, and special character.';
     } elseif ($new_pass !== $confirm) {
         $error = 'New passwords do not match.';
@@ -63,9 +50,6 @@ if (isset($_POST['change_password'])) {
     }
 }
 
-/* =========================
-   ACTIVE TAB
-========================= */
 $active_tab = 'edit';
 if (isset($_POST['change_password'])) $active_tab = 'password';
 ?>
@@ -104,14 +88,12 @@ if (isset($_POST['change_password'])) $active_tab = 'password';
 
     <div class="profile-page">
 
-        <!-- FLASH -->
         <?php if ($success): ?>
             <div class="flash success">✅ <?= htmlspecialchars($success) ?></div>
         <?php elseif ($error): ?>
             <div class="flash error">❌ <?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
 
-        <!-- PROFILE HEADER CARD -->
         <div class="profile-header-card">
             <div class="avatar-wrap">
                 <i class="fas fa-user-tie avatar-icon"></i>
@@ -123,7 +105,6 @@ if (isset($_POST['change_password'])) $active_tab = 'password';
             </div>
         </div>
 
-        <!-- TABS -->
         <div class="profile-tabs">
             <button class="ptab-btn <?= $active_tab=='edit'     ? 'active':'' ?>" onclick="switchTab('edit',     this)">✏️ Edit Profile</button>
             <button class="ptab-btn <?= $active_tab=='password' ? 'active':'' ?>" onclick="switchTab('password', this)">🔒 Change Password</button>
@@ -161,17 +142,9 @@ if (isset($_POST['change_password'])) $active_tab = 'password';
         <div class="ptab-content <?= $active_tab=='password' ? 'active':'' ?>" id="tab-password">
             <div class="profile-card">
                 <div class="card-title">🔒 Change Password</div>
-                <p class="pw-note">💡 Your account was created with a temporary password. We recommend changing it now.</p>
+                <p class="pw-note">💡 Set a new password for your account.</p>
                 <form method="POST" id="passwordForm">
                     <div class="form-grid">
-
-                        <div class="form-group full">
-                            <label>Current Password</label>
-                            <div class="password-wrapper">
-                                <input type="password" name="current_password" id="currentPassword" placeholder="Enter current password" required>
-                                <span class="toggle-password" data-target="currentPassword"></span>
-                            </div>
-                        </div>
 
                         <div class="form-group">
                             <label>New Password</label>
