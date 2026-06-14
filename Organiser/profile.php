@@ -163,7 +163,7 @@ if (isset($_POST['change_password'])) $active_tab = 'password';
         <div class="nav-dropdown" id="navDropdown">
             <a href="profile.php"><i class="fas fa-user"></i> My Profile</a>
             <a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-            <a href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <a href="../login.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
     </div>
 </nav>

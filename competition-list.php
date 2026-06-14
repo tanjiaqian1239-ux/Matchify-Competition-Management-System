@@ -82,10 +82,10 @@ if (isset($_SESSION['user_id'])) {
     <img src="images/logo.png" class="logo">
 
     <ul>
-        <li><a href="../Organiser/index(participant).php">Home</a></li>
-        <li><a href="../Organiser/competition-list.php" class="active">Competition List</a></li>
-        <li><a href="../Organiser/about.php">About</a></li>
-        <li><a href="../Organiser/contact.php">Contact</a></li>
+        <li><a href="index.php">Home</a></li>
+        <li><a href="competition-list.php" class="active">Competition List</a></li>
+        <li><a href="about.php">About</a></li>
+        <li><a href="contact.php">Contact</a></li>
     </ul>
 
     <div class="nav-right">

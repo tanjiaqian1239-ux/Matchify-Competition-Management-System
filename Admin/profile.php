@@ -130,7 +130,7 @@ if (isset($_POST['change_password'])) $active_tab = 'password';
         <li><a href="manage-users.php"><i class="fas fa-users"></i><span>Manage Users</span></a></li>
         <li><a href="manage-competition.php"><i class="fas fa-trophy"></i><span>Competitions</span></a></li>
         <li><a href="manage-judges.php"><i class="fas fa-gavel"></i><span>Judges</span></a></li>
-        <li class="logout"><a href="../logout.php"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+        <li class="logout"><a href="../login.php"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
     </ul>
 </div>
 

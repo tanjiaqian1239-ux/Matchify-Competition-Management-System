@@ -139,7 +139,7 @@ $msg = $_GET['msg'] ?? '';
         <li class="active"><a href="manage-users.php"><i class="fas fa-users"></i><span>Manage Users</span></a></li>
         <li><a href="manage-competition-list.php"><i class="fas fa-list-check"></i><span>Manage Competition</span></a></li>
         <li><a href="manage-judges.php"><i class="fas fa-gavel"></i><span>Manage Judges</span></a></li>
-        <li class="logout"><a href="../logout.php"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+        <li class="logout"><a href="../login.php"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
     </ul>
 </div>
 

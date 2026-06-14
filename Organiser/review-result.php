@@ -331,7 +331,7 @@ if ($uq && $uq->num_rows > 0) {
         <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
         <li><a href="profile.php"><i class="fas fa-user"></i><span>Profile</span></a></li>
         <li class="active"><a href="apply-competition.php"><i class="fas fa-trophy"></i><span>Apply Competition</span></a></li>
-        <li class="logout"><a href="../logout.php"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+        <li class="logout"><a href="../login.php"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
     </ul>
 </div>
 

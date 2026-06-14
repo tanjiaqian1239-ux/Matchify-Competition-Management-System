@@ -1,9 +1,8 @@
 <?php
-session_start();
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-$profile_image = $_SESSION['profile_image'] ?? '../images/default-avatar.png';
+require __DIR__ . '/config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -12,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $message = htmlspecialchars($_POST['message']);
 
     try {
-        $mail = require __DIR__ . '/../mailer.php';
+        $mail = require __DIR__ . "/mailer.php";
 
         $mail->setFrom('tanjiaqian1239@gmail.com', 'Matchify Competition Management Platform');
         $mail->addAddress('tanjiaqian1239@gmail.com');
@@ -78,39 +77,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="../images/logo.png">
+    <link rel="icon" type="image/png" href="images/logo.png">
     <title>Contact - Matchify</title>
-    <link rel="stylesheet" href="../css/contact.css">
+    <link rel="stylesheet" href="css/contact.css">
 </head>
 <body>
 
 <div class="hero">
 
     <nav>
-        <img src="../images/logo.png" class="logo">
+        <img src="images/logo.png" class="logo">
 
         <ul>
             <li><a href="index.php">Home</a></li>
             <li><a href="competition-list.php">Competition List</a></li>
             <li><a href="about.php">About</a></li>
-            <li><a href="../Organiser/contact.php">Contact</a></li>
+            <li><a href="contact.php">Contact</a></li>
         </ul>
 
-        <div class="nav-right">
-            <?php if (!isset($_SESSION['user_id'])): ?>
-                <a href="../login.php" class="btn">Login</a>
-            <?php else: ?>
-                <div class="profile-dropdown">
-                    <img src="<?php echo $profile_image; ?>" class="profile-icon" onclick="toggleMenu()">
-
-                    <div class="dropdown-menu" id="dropdownMenu">
-                        <a href="profile.php">My Profile</a>
-                        <a href="../login.php">Logout</a>
-                    </div>
-                </div>
-            <?php endif; ?>
-        </div>
-
+        <a href="login.php" class="btn">Login</a>
     </nav>
 
     <div class="content">
@@ -140,20 +125,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
 </div>
-
-<script>
-function toggleMenu() {
-    const menu = document.getElementById('dropdownMenu');
-    menu.classList.toggle('show');
-}
-
-window.onclick = function(e) {
-    if (!e.target.classList.contains('profile-icon')) {
-        const menu = document.getElementById('dropdownMenu');
-        if (menu) menu.classList.remove('show');
-    }
-}
-</script>
 
 </body>
 </html>

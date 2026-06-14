@@ -1,9 +1,6 @@
 <?php
-session_start();
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-
-$profile_image = $_SESSION['profile_image'] ?? '../images/default-avatar.png';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -90,15 +87,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <img src="../images/logo.png" class="logo">
 
         <ul>
-            <li><a href="index.php">Home</a></li>
+            <li><a href="index-organiser.php">Home</a></li>
             <li><a href="competition-list.php">Competition List</a></li>
             <li><a href="about.php">About</a></li>
-            <li><a href="../Organiser/contact.php">Contact</a></li>
+            <li><a href="contact.php">Contact</a></li>
         </ul>
 
         <div class="nav-right">
             <?php if (!isset($_SESSION['user_id'])): ?>
-                <a href="../login.php" class="btn">Login</a>
             <?php else: ?>
                 <div class="profile-dropdown">
                     <img src="<?php echo $profile_image; ?>" class="profile-icon" onclick="toggleMenu()">
@@ -140,20 +136,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
 </div>
-
-<script>
-function toggleMenu() {
-    const menu = document.getElementById('dropdownMenu');
-    menu.classList.toggle('show');
-}
-
-window.onclick = function(e) {
-    if (!e.target.classList.contains('profile-icon')) {
-        const menu = document.getElementById('dropdownMenu');
-        if (menu) menu.classList.remove('show');
-    }
-}
-</script>
 
 </body>
 </html>

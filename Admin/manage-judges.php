@@ -68,7 +68,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         </li>
 
         <li>
-            <a href="#">
+            <a href="profile.php">
                 <i class="fas fa-user"></i>
                 <span>Profile</span>
             </a>

@@ -44,7 +44,7 @@ if (isset($_SESSION['user_id'])) {
         <li><a href="../Organiser/index-organiser.php">Home</a></li>
         <li><a href="../Organiser/competition-list.php">Competition List</a></li>
         <li><a href="../Organiser/about.php">About</a></li>
-        <li><a href="../Contact.php">Contact</a></li>
+        <li><a href="Contact.php">Contact</a></li>
     </ul>
 
     <div class="nav-right">
@@ -71,7 +71,7 @@ if (isset($_SESSION['user_id'])) {
         <p>Join & Compete with Ease</p>
         <div class="buttons">
             <a href="../Participant/competition-list.php" class="btn dark">View Competitions →</a>
-            <a href="#" class="btn light">Get Started</a>
+            <a href="competition-list.php" class="btn light">Get Started</a>
         </div>
     </div>
 </div>
